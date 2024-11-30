@@ -47,7 +47,7 @@ export default function Header() {
               onMouseLeave={handleMouseLeave}
               className="relative flex items-center"
             >
-              <Link href="/" className="text-gray-300 hover:text-white transition duration-300 text-lg">
+              <Link href="/home" className="text-gray-300 hover:text-white transition duration-300 text-lg">
                 Home
               </Link>
               {hoveredLink === 'home' && (
