@@ -19,34 +19,37 @@ function page() {
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-950 text-white">
       <Header />
 
-      <div className="text-center py-12 mt-24 left-36">
+      <div className="text-center py-12 mt-24">
         <h1 className="text-5xl font-extrabold text-purple-400">My Bets</h1>
         <p className="text-gray-300 mt-4">Track and manage your ongoing and finished bets easily.</p>
       </div>
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto bg-gray-800 rounded-lg shadow-lg">
-          <div className="grid grid-cols-1 lg:grid-cols-2">
+        <div className="max-w-6xl mx-auto bg-gray-800 rounded-lg shadow-lg">
+          <div className="grid grid-cols-1 lg:grid-cols-2 divide-x divide-gray-700">
             {/* Current Bets Section */}
-            <div className="p-6 border-r border-gray-700">
-              <h2 className="text-2xl font-bold text-purple-400 mb-4">Current Bets</h2>
-              <div className="space-y-4">
+            <div className="flex flex-col items-center justify-center p-8">
+              <h2 className="text-3xl font-bold text-purple-400 mb-6">Current Bets</h2>
+              <div className="space-y-6 w-full">
                 {currentBets.map((bet, index) => (
                   <div
                     key={index}
-                    className="bg-gray-900 p-4 rounded-md hover:bg-gray-800 transition flex flex-col space-y-2"
+                    className="bg-gray-900 p-6 rounded-lg hover:bg-gray-800 transition shadow-lg"
                   >
-                    <h3 className="text-lg font-semibold text-purple-300">{bet.game}</h3>
-                    <p className="text-gray-400">Wager: {bet.wager}</p>
-                    <div className="flex items-center gap-2">
-                      <AiOutlineClockCircle className="w-5 h-5 text-yellow-500" />
+                    <h3 className="text-xl font-semibold text-purple-300">{bet.game}</h3>
+                    <p className="text-gray-400 mt-2">Wager: {bet.wager}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <AiOutlineClockCircle className="w-6 h-6 text-yellow-500" />
                       <p className="text-gray-500">Status: {bet.status}</p>
                     </div>
-                    <div className="bg-gray-700 rounded-full h-2 mt-2">
-                      <div
-                        className="bg-purple-500 h-2 rounded-full"
-                        style={{ width: `${bet.progress}%` }}
-                      />
+                    <div className="relative mt-4">
+                      <div className="bg-gray-700 rounded-full h-3 overflow-hidden">
+                        <div
+                          className="bg-purple-500 h-full rounded-full transition-all duration-500"
+                          style={{ width: `${bet.progress}%` }}
+                        ></div>
+                      </div>
+                      <span className="absolute right-0 top-0 text-sm text-purple-300">{`${bet.progress}%`}</span>
                     </div>
                   </div>
                 ))}
@@ -54,21 +57,21 @@ function page() {
             </div>
 
             {/* Finished Bets Section */}
-            <div className="p-6">
-              <h2 className="text-2xl font-bold text-purple-400 mb-4">Finished Bets</h2>
-              <div className="space-y-4">
+            <div className="flex flex-col items-center justify-center p-8">
+              <h2 className="text-3xl font-bold text-purple-400 mb-6">Finished Bets</h2>
+              <div className="space-y-6 w-full">
                 {finishedBets.map((bet, index) => (
                   <div
                     key={index}
-                    className="bg-gray-900 p-4 rounded-md hover:bg-gray-800 transition flex flex-col space-y-2"
+                    className="bg-gray-900 p-6 rounded-lg hover:bg-gray-800 transition shadow-lg"
                   >
-                    <h3 className="text-lg font-semibold text-purple-300">{bet.game}</h3>
-                    <p className="text-gray-400">Wager: {bet.wager}</p>
-                    <div className="flex items-center gap-2">
+                    <h3 className="text-xl font-semibold text-purple-300">{bet.game}</h3>
+                    <p className="text-gray-400 mt-2">Wager: {bet.wager}</p>
+                    <div className="flex items-center gap-2 mt-2">
                       {bet.result === "Won" ? (
-                        <AiOutlineCheckCircle className="w-5 h-5 text-green-400" />
+                        <AiOutlineCheckCircle className="w-6 h-6 text-green-500" />
                       ) : (
-                        <AiOutlineCloseCircle className="w-5 h-5 text-red-400" />
+                        <AiOutlineCloseCircle className="w-6 h-6 text-red-500" />
                       )}
                       <p
                         className={`text-lg font-semibold ${
