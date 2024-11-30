@@ -28,7 +28,7 @@ function page() {
         <p className="text-gray-300 mt-4">Track and manage your ongoing and finished bets easily.</p>
       </div>
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="container border border-white mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto p-[2px] bg-transparent rounded-lg shadow-lg">
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Current Bets Section */}
