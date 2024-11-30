@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,36 +49,44 @@ export default function Home() {
       </div>
 
       {/* Mobile Navigation */}
-      {isOpen && (
-        <nav className="md:hidden absolute top-[10vh] left-0 w-full bg-black bg-opacity-80 backdrop-blur-lg shadow-lg">
-          <div className="space-y-2">
-            <a
-              href="/"
-              className="block py-3 px-6 text-gray-300 hover:text-white transition hover:bg-black/40"
-            >
-              Home
-            </a>
-            <a
-              href="/about"
-              className="block py-3 px-6 text-gray-300 hover:text-white transition hover:bg-black/40"
-            >
-              About
-            </a>
-            <a
-              href="/market"
-              className="block py-3 px-6 text-gray-300 hover:text-white transition hover:bg-black/40"
-            >
-              Market
-            </a>
-            <a
-              href="/contact"
-              className="block py-3 px-6 text-gray-300 hover:text-white transition hover:bg-black/40"
-            >
-              Contact
-            </a>
-          </div>
-        </nav>
-      )}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.nav
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden absolute top-[10vh] left-0 w-full bg-black bg-opacity-80 backdrop-blur-lg shadow-lg"
+          >
+            <div className="space-y-2">
+              <a
+                href="/"
+                className="block py-3 px-6 text-gray-300 hover:text-white transition hover:bg-black/40"
+              >
+                Home
+              </a>
+              <a
+                href="/about"
+                className="block py-3 px-6 text-gray-300 hover:text-white transition hover:bg-black/40"
+              >
+                About
+              </a>
+              <a
+                href="/market"
+                className="block py-3 px-6 text-gray-300 hover:text-white transition hover:bg-black/40"
+              >
+                Market
+              </a>
+              <a
+                href="/contact"
+                className="block py-3 px-6 text-gray-300 hover:text-white transition hover:bg-black/40"
+              >
+                Contact
+              </a>
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
