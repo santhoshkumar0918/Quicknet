@@ -19,16 +19,16 @@ function MyBetsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-950 text-white">
-      {/* Fixed Header */}
+     
       <Header />
 
-      {/* Hero Section */}
-      <div className="text-center py-16 mt-16"> 
+      
+      <div className="text-center py-16 mt-16 pl-12 "> 
         <h1 className="text-5xl font-extrabold text-purple-400">My Bets</h1>
         <p className="text-gray-300 mt-4">Track and manage your ongoing and finished bets easily.</p>
       </div>
 
-      {/* Main Content */}
+     
       <main className="container mx-auto px-4 sm:px-6 lg:px-8">
        
         <div className="flex justify-center mb-8">
