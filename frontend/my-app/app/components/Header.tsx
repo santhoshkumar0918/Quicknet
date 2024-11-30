@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -9,6 +10,7 @@ import Link from 'next/link';
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+  const [isWalletConnected, setIsWalletConnected] = useState(false); // Placeholder for wallet connection state
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -16,6 +18,11 @@ export default function Header() {
 
   const handleMouseEnter = (link: string) => setHoveredLink(link);
   const handleMouseLeave = () => setHoveredLink(null);
+
+  const handleConnectWallet = () => {
+    // Placeholder for wallet connection logic
+    setIsWalletConnected(!isWalletConnected);
+  };
 
   return (
     <>
@@ -27,16 +34,16 @@ export default function Header() {
             <Image
               src="/images/quicklogo.jpeg"
               alt="AI Market Logo"
-              width={50} 
-              height={50} 
+              width={80} 
+              height={80} 
               className="rounded-full"
             />
-            <span className="text-white text-2xl font-bold ml-2">AI Market</span>
+            <span className="text-white text-2xl font-bold ml-2"></span>
           </a>
         </div>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-8">
+        {/* Desktop Navigation Centered */}
+        <nav className="hidden md:flex space-x-8 mx-auto">
           <div
             onMouseEnter={() => handleMouseEnter('home')}
             onMouseLeave={handleMouseLeave}
@@ -81,6 +88,28 @@ export default function Header() {
             )}
           </div>
         </nav>
+
+        {/* Right Corner Buttons */}
+        <div className="flex space-x-4 items-center">
+          <Link
+            href="/signin"
+            className="text-gray-300 hover:text-white transition duration-300 text-lg"
+          >
+            Sign In
+          </Link>
+          <Link
+            href="/signup"
+             className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition text-lg"
+          >
+            Sign Up
+          </Link>
+          <button
+            onClick={handleConnectWallet}
+            className="text-gray-300 hover:text-white transition duration-300 text-lg border-2 border-gray-300 px-4 py-2 rounded-full"
+          >
+            {isWalletConnected ? 'Disconnect Wallet' : 'Connect Wallet'}
+          </button>
+        </div>
 
         {/* Mobile Menu Toggle */}
         <div className="md:hidden">
