@@ -142,6 +142,7 @@ function page() {
     <div className="min-h-screen bg-gradient-to-b from-gray-950 to-gray-950 text-white">
       <Header />
 
+      {/* Main Heading and Description */}
       <div className="text-center py-12 mt-24">
         <h1 className="text-5xl font-extrabold text-purple-400">My Bets</h1>
         <p className="text-gray-300 mt-4">
@@ -150,9 +151,11 @@ function page() {
       </div>
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Main Card Wrapper */}
         <div className="max-w-6xl mx-auto p-[2px] bg-gradient-to-br from-black via-purple-700 to-purple-400 rounded-lg shadow-lg">
           <div className="bg-gray-950 rounded-lg p-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              
               {/* Current Bets Section */}
               <div className="p-6 border-r border-gray-700">
                 <h2 className="text-2xl font-bold text-purple-400 mb-4 text-center">
@@ -162,18 +165,20 @@ function page() {
                   {currentBets.map((bet, index) => (
                     <div
                       key={index}
-                      className="bg-gray-900 p-4 rounded-md hover:bg-gray-800 transition flex flex-col space-y-2"
+                      className="p-[2px] bg-gradient-to-br from-black via-purple-700 to-purple-400 rounded-md"
                     >
-                      <h3 className="text-lg font-semibold text-purple-300">
-                        {bet.game}
-                      </h3>
-                      <p className="text-gray-400">Wager: {bet.wager}</p>
-                      <p className="text-gray-500">Status: {bet.status}</p>
-                      <div className="bg-gray-700 rounded-full h-2 mt-2">
-                        <div
-                          className="bg-purple-500 h-2 rounded-full"
-                          style={{ width: `${bet.progress}%` }}
-                        />
+                      <div className="p-4 rounded-md bg-gray-950 hover:bg-gray-800 transition flex flex-col space-y-2">
+                        <h3 className="text-lg font-semibold text-purple-300">
+                          {bet.game}
+                        </h3>
+                        <p className="text-gray-400">Wager: {bet.wager}</p>
+                        <p className="text-gray-500">Status: {bet.status}</p>
+                        <div className="bg-gray-700 rounded-full h-2 mt-2">
+                          <div
+                            className="bg-purple-500 h-2 rounded-full"
+                            style={{ width: `${bet.progress}%` }}
+                          />
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -186,8 +191,9 @@ function page() {
                   Finished Bets
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  
                   {/* Profitable Bets Table */}
-                  <div className="bg-gradient-to-br from-black via-purple-700 to-purple-400 p-[2px] rounded-lg">
+                  <div className="bg-gradient-to-br from-black via-gray-300 to-purple-100 p-[2px] rounded-lg">
                     <div className="bg-gray-950 rounded-lg p-6">
                       <h3 className="text-xl font-bold text-green-400 mb-4 text-center">
                         Profitable Bets
@@ -219,7 +225,7 @@ function page() {
                   </div>
 
                   {/* Unprofitable Bets Table */}
-                  <div className="bg-gradient-to-br from-black via-purple-700 to-purple-400 p-[2px] rounded-lg">
+                  <div className="bg-gradient-to-br from-black via-gray-300 to-purple-100 p-[2px] rounded-lg">
                     <div className="bg-gray-950 rounded-lg p-6">
                       <h3 className="text-xl font-bold text-red-400 mb-4 text-center">
                         Unprofitable Bets
