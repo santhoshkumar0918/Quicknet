@@ -165,7 +165,7 @@ function page() {
                   {currentBets.map((bet, index) => (
                     <div
                       key={index}
-                      className="p-[2px] bg-gradient-to-br from-black via-purple-700 to-purple-400 rounded-md"
+                      className="p-[2px] bg-gradient-to-br from-black via-gray-300 to-gray-100 rounded-md"
                     >
                       <div className="p-4 rounded-md bg-gray-950 hover:bg-gray-800 transition flex flex-col space-y-2">
                         <h3 className="text-lg font-semibold text-purple-300">
