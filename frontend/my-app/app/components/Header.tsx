@@ -5,11 +5,14 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { RpcProvider } from 'starknet';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -19,31 +22,49 @@ export default function Header() {
   const handleMouseLeave = () => setHoveredLink(null);
 
   const handleConnectWallet = async () => {
+    setIsConnecting(true);
+    setError(null);
+
     try {
-      // Access the StarkNet wallet from the browser window (e.g., Argent X)
       const starknet = (window as any).starknet;
       if (!starknet) {
-        alert('No StarkNet wallet detected. Please install Argent X or a compatible wallet.');
+        setError('No StarkNet wallet detected. Please install Argent X or a compatible wallet.');
+        setIsConnecting(false);
         return;
       }
 
-      // Enable the wallet connection
-      await starknet.enable();
-      
-      const accounts = starknet.accounts || [];
-      if (accounts.length > 0) {
-        setWalletAddress(accounts[0].address); 
-        alert('No accounts found in the wallet.');
+      const connection = await starknet.enable({
+        dappName: 'QuickNet',
+      });
+
+      if (!connection || connection.length === 0) {
+        setError('Connection failed. Please check your wallet and try again.');
+        setIsConnecting(false);
+        return;
       }
-    } catch (error) {
-      console.error('Error connecting wallet:', error);
-      alert('Failed to connect wallet. Please try again.');
+
+      const address = connection[0];
+      const provider = new RpcProvider({
+        nodeUrl: 'https://starknet-mainnet.public.blastapi.io',
+      });
+
+      try {
+        await provider.getBlock();
+        setWalletAddress(address);
+      } catch {
+        setError('Could not validate wallet connection.');
+      }
+    } catch (connectError) {
+      console.error('Wallet Connection Error:', connectError);
+      setError('An unexpected error occurred while connecting.');
+    } finally {
+      setIsConnecting(false);
     }
   };
 
   const handleDisconnectWallet = () => {
-    setWalletAddress(null); // Clear the wallet address
-    alert('Wallet disconnected.');
+    setWalletAddress(null);
+    setError(null);
   };
 
   return (
@@ -52,15 +73,15 @@ export default function Header() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-full">
           {/* Logo Positioned at the Left Corner */}
           <div className="flex items-center">
-            <a href="/" className="hover:opacity-80 transition flex items-center">
+            <Link href="/" className="hover:opacity-80 transition flex items-center">
               <Image
                 src="/images/quicklogo.jpeg"
-                alt="AI Market Logo"
+                alt="QuickNet Logo"
                 width={80}
                 height={80}
                 className="rounded-full"
               />
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Navigation Centered */}
@@ -86,49 +107,24 @@ export default function Header() {
                 />
               )}
             </div>
-
-            <div
-              onMouseEnter={() => handleMouseEnter('my-bets')}
-              onMouseLeave={handleMouseLeave}
-              className="relative flex items-center"
-            >
-              <Link href="/my-bets" className="text-gray-300 hover:text-white transition duration-300 text-lg">
-                My Bets
-              </Link>
-              {hoveredLink === 'my-bets' && (
-                <motion.div
-                  className="absolute left-0 right-0 bottom-0 h-[2px] bg-purple-300"
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  exit={{ scaleX: 0 }}
-                  transition={{
-                    duration: 0.3,
-                    ease: 'easeOut',
-                  }}
-                />
-              )}
-            </div>
           </nav>
 
           {/* Right Corner Buttons */}
           <div className="flex space-x-4 items-center">
-            <Link
-              href="/signin"
-              className="text-gray-300 hover:text-white transition duration-300 text-lg"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/signup"
-              className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition text-lg"
-            >
-              Sign Up
-            </Link>
+            {error && <span className="text-red-500">{error}</span>}
             <button
               onClick={walletAddress ? handleDisconnectWallet : handleConnectWallet}
-              className="text-gray-300 hover:text-white transition duration-300 text-lg border-2 border-gray-300 px-4 py-2 rounded-full"
+              disabled={isConnecting}
+              className={`
+                text-gray-300 hover:text-white transition duration-300 text-lg border-2 border-gray-300 px-4 py-2 rounded-full
+                ${isConnecting ? 'opacity-50 cursor-not-allowed' : ''}
+              `}
             >
-              {walletAddress ? `Disconnect (${walletAddress.slice(0, 6)}...)` : 'Connect Wallet'}
+              {isConnecting
+                ? 'Connecting...'
+                : walletAddress
+                ? `Disconnect (${walletAddress.slice(0, 6)}...)`
+                : 'Connect Wallet'}
             </button>
           </div>
 
@@ -168,13 +164,6 @@ export default function Header() {
             className="block py-3 px-6 text-gray-300 hover:text-white transition hover:bg-black/40"
           >
             Home
-          </Link>
-          <Link
-            href="/my-bets"
-            onClick={toggleMenu}
-            className="block py-3 px-6 text-gray-300 hover:text-white transition hover:bg-black/40"
-          >
-            My Bets
           </Link>
         </div>
       </motion.nav>
