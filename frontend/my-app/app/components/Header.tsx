@@ -9,7 +9,7 @@ import Link from 'next/link';
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -18,8 +18,32 @@ export default function Header() {
   const handleMouseEnter = (link: string) => setHoveredLink(link);
   const handleMouseLeave = () => setHoveredLink(null);
 
-  const handleConnectWallet = () => {
-    setIsWalletConnected(!isWalletConnected);
+  const handleConnectWallet = async () => {
+    try {
+      // Access the StarkNet wallet from the browser window (e.g., Argent X)
+      const starknet = (window as any).starknet;
+      if (!starknet) {
+        alert('No StarkNet wallet detected. Please install Argent X or a compatible wallet.');
+        return;
+      }
+
+      // Enable the wallet connection
+      await starknet.enable();
+      
+      const accounts = starknet.accounts || [];
+      if (accounts.length > 0) {
+        setWalletAddress(accounts[0].address); 
+        alert('No accounts found in the wallet.');
+      }
+    } catch (error) {
+      console.error('Error connecting wallet:', error);
+      alert('Failed to connect wallet. Please try again.');
+    }
+  };
+
+  const handleDisconnectWallet = () => {
+    setWalletAddress(null); // Clear the wallet address
+    alert('Wallet disconnected.');
   };
 
   return (
@@ -101,10 +125,10 @@ export default function Header() {
               Sign Up
             </Link>
             <button
-              onClick={handleConnectWallet}
+              onClick={walletAddress ? handleDisconnectWallet : handleConnectWallet}
               className="text-gray-300 hover:text-white transition duration-300 text-lg border-2 border-gray-300 px-4 py-2 rounded-full"
             >
-              {isWalletConnected ? 'Disconnect Wallet' : 'Connect Wallet'}
+              {walletAddress ? `Disconnect (${walletAddress.slice(0, 6)}...)` : 'Connect Wallet'}
             </button>
           </div>
 
