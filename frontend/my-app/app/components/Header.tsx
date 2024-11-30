@@ -113,7 +113,7 @@ export default function Header() {
               className="relative flex items-center"
             >
               <Link href="/my-bets" className="text-gray-300 hover:text-white transition duration-300 text-lg">
-                Home
+                My Bets
               </Link>
               {hoveredLink === 'my-bets' && (
                 <motion.div
