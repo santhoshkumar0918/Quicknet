@@ -9,7 +9,7 @@ function MyBetsPage() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-[11vh]">
-        <h1 className="text-3xl font-bold text-center mb-10 text-purple-400">
+        <h1 className="text-3xl font-bold text-center mb-10 pr-14 mt-3 text-purple-400">
           My Bets
         </h1>
 
