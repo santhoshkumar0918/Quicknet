@@ -11,9 +11,9 @@ export default function HomePage() {
       <main className="mt-[10vh] p-4">
         {/* Centered Content */}
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-gray-100">Welcome To Quicknet</h1>
+          <h1 className="text-4xl font-bold text-gray-800">Welcome to AI Market</h1>
           <p className="text-lg text-gray-500 mt-4">
-          An agent powered blockchain based Prediction market that leverages the power of A.I. agents
+            Discover the future of AI-powered solutions.
           </p>
         </div>
 
@@ -25,7 +25,7 @@ export default function HomePage() {
               Explore the most popular and exciting sports betting options available.
             </p>
           </div>
-          <div className="bg-gradient-to-r from-purple-300 via-purple-500 to-purple-300 p-[1px] rounded-lg max-w-4xl mx-auto">
+          <div className="bg-gradient-to-br from-black via-purple-700 to-purple-400 p-[2px] rounded-lg max-w-4xl mx-auto">
             <div className="bg-gray-950 text-white rounded-lg p-8">
               <h3 className="text-4xl font-bold text-center text-purple-300 mb-6">
                 Major League Showdown: Team Alpha vs Team Omega
@@ -72,9 +72,13 @@ export default function HomePage() {
           {["Team A vs Team B", "Team X vs Team Y", "Team M vs Team N"].map((match, index) => (
             <div
               key={index}
-              className="bg-gradient-to-r from-purple-300 via-purple-500 to-purple-300 p-[1px] rounded-lg"
+              className="relative rounded-lg overflow-hidden"
             >
-              <div className="bg-gray-950 text-white rounded-lg p-6">
+              {/* Gradient Border */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-700 to-purple-400 rounded-lg p-[2px]"></div>
+
+              {/* Content */}
+              <div className="relative bg-gray-950 text-white rounded-lg p-6">
                 <h2 className="text-3xl font-bold text-center text-purple-300">{match}</h2>
                 <div className="flex justify-between items-center mt-6">
                   <div className="flex items-center">
