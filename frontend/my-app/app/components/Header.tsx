@@ -9,7 +9,7 @@ import Link from 'next/link';
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
-  const [isWalletConnected, setIsWalletConnected] = useState(false); // Placeholder for wallet connection state
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -19,7 +19,6 @@ export default function Header() {
   const handleMouseLeave = () => setHoveredLink(null);
 
   const handleConnectWallet = () => {
-    // Placeholder for wallet connection logic
     setIsWalletConnected(!isWalletConnected);
   };
 
@@ -124,74 +123,37 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        <motion.nav
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: isOpen ? 1 : 0, y: isOpen ? 0 : -20 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-          className={`md:hidden absolute top-[11vh] left-0 w-full bg-gray-950 bg-opacity-80 backdrop-blur-lg shadow-lg ${!isOpen ? 'hidden' : ''}`}
-        >
-          <div className="space-y-2">
-            <div
-              onMouseEnter={() => handleMouseEnter('home')}
-              onMouseLeave={handleMouseLeave}
-              className="relative flex items-center"
-            >
-              <Link
-                href="/"
-                onClick={toggleMenu}
-                className="block py-3 px-6 text-gray-300 hover:text-white transition hover:bg-black/40"
-              >
-                Home
-              </Link>
-              {hoveredLink === 'home' && (
-                <motion.div
-                  className="absolute left-0 right-0 bottom-0 h-[1px] bg-purple-300"
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  exit={{ scaleX: 0 }}
-                  transition={{
-                    duration: 0.3,
-                    ease: 'easeOut',
-                  }}
-                />
-              )}
-            </div>
-
-            <div
-              onMouseEnter={() => handleMouseEnter('my-bets')}
-              onMouseLeave={handleMouseLeave}
-              className="relative flex items-center"
-            >
-              <Link
-                href="/my-bets"
-                onClick={toggleMenu}
-                className="block py-3 px-6 text-gray-300 hover:text-white transition hover:bg-black/40"
-              >
-                My Bets
-              </Link>
-              {hoveredLink === 'my-bets' && (
-                <motion.div
-                  className="absolute left-0 right-0 bottom-0 h-[1px] bg-purple-300"
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  exit={{ scaleX: 0 }}
-                  transition={{
-                    duration: 0.3,
-                    ease: 'easeOut',
-                  }}
-                />
-              )}
-            </div>
-          </div>
-          
-        </motion.nav>
-        
+        {/* Fixed Gradient Line */}
+        <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-purple-300 to-transparent" />
       </header>
 
-      {/* Spacer for header height */}
-      <div className="w-full h-[2px] mt-[11vh] bg-gradient-to-r from-transparent via-purple-300 to-transparent" />
+      {/* Mobile Navigation */}
+      <motion.nav
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: isOpen ? 1 : 0, y: isOpen ? 0 : -20 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3 }}
+        className={`md:hidden absolute top-[11vh] left-0 w-full bg-gray-950 bg-opacity-80 backdrop-blur-lg shadow-lg ${
+          !isOpen ? 'hidden' : ''
+        }`}
+      >
+        <div className="space-y-2">
+          <Link
+            href="/"
+            onClick={toggleMenu}
+            className="block py-3 px-6 text-gray-300 hover:text-white transition hover:bg-black/40"
+          >
+            Home
+          </Link>
+          <Link
+            href="/my-bets"
+            onClick={toggleMenu}
+            className="block py-3 px-6 text-gray-300 hover:text-white transition hover:bg-black/40"
+          >
+            My Bets
+          </Link>
+        </div>
+      </motion.nav>
     </>
   );
 }
