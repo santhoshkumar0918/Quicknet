@@ -107,6 +107,27 @@ export default function Header() {
                 />
               )}
             </div>
+            <div
+              onMouseEnter={() => handleMouseEnter('my-bets')}
+              onMouseLeave={handleMouseLeave}
+              className="relative flex items-center"
+            >
+              <Link href="/my-bets" className="text-gray-300 hover:text-white transition duration-300 text-lg">
+                Home
+              </Link>
+              {hoveredLink === 'my-bets' && (
+                <motion.div
+                  className="absolute left-0 right-0 bottom-0 h-[2px] bg-purple-300"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  exit={{ scaleX: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: 'easeOut',
+                  }}
+                />
+              )}
+            </div>
           </nav>
 
           {/* Right Corner Buttons */}
