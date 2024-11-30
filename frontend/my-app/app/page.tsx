@@ -150,7 +150,7 @@ export default function HomePage() {
               Explore the most popular and exciting sports betting options available.
             </p>
           </div>
-          <div className="bg-gradient-to-r from-transparent via-purple-300 to-transparent p-1 rounded-lg max-w-4xl mx-auto">
+          <div className="bg-gradient-to-r from-purple-300 via-purple-500 to-purple-300 p-[1px] rounded-lg max-w-4xl mx-auto">
             <div className="bg-gray-950 text-white rounded-lg p-8">
               <h3 className="text-4xl font-bold text-center text-purple-300 mb-6">
                 Major League Showdown: Team Alpha vs Team Omega
@@ -194,105 +194,42 @@ export default function HomePage() {
 
         {/* Smaller Betting Grids */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full px-4 sm:px-6 lg:px-8">
-          
-          {/* Grid 1 */}
-          <div className="bg-gradient-to-r from-transparent via-purple-300 to-transparent p-[1px] rounded-lg">
-            <div className="bg-gray-950 text-white rounded-lg p-6">
-              <h2 className="text-3xl font-bold text-center text-purple-300">Team A vs Team B</h2>
-              <div className="flex justify-between items-center mt-6">
-                <div className="flex items-center">
-                  <div className="w-16 h-16 bg-purple-600 rounded-full flex justify-center items-center">
-                    <span className="text-white text-xl font-semibold">A</span>
+          {["Team A vs Team B", "Team X vs Team Y", "Team M vs Team N"].map((match, index) => (
+            <div
+              key={index}
+              className="bg-gradient-to-r from-purple-300 via-purple-500 to-purple-300 p-[1px] rounded-lg"
+            >
+              <div className="bg-gray-950 text-white rounded-lg p-6">
+                <h2 className="text-3xl font-bold text-center text-purple-300">{match}</h2>
+                <div className="flex justify-between items-center mt-6">
+                  <div className="flex items-center">
+                    <div className="w-16 h-16 bg-purple-600 rounded-full flex justify-center items-center">
+                      <span className="text-white text-xl font-semibold">A</span>
+                    </div>
+                    <div className="ml-4">
+                      <h3 className="text-xl font-semibold">Team A</h3>
+                      <p className="text-sm text-gray-400">Best odds: 1.80</p>
+                    </div>
                   </div>
-                  <div className="ml-4">
-                    <h3 className="text-xl font-semibold">Team A</h3>
-                    <p className="text-sm text-gray-400">Best odds: 1.80</p>
+                  <div className="text-xl text-gray-400 font-bold">VS</div>
+                  <div className="flex items-center">
+                    <div className="w-16 h-16 bg-purple-600 rounded-full flex justify-center items-center">
+                      <span className="text-white text-xl font-semibold">B</span>
+                    </div>
+                    <div className="ml-4">
+                      <h3 className="text-xl font-semibold">Team B</h3>
+                      <p className="text-sm text-gray-400">Best odds: 2.05</p>
+                    </div>
                   </div>
                 </div>
-                <div className="text-xl text-gray-400 font-bold">VS</div>
-                <div className="flex items-center">
-                  <div className="w-16 h-16 bg-purple-600 rounded-full flex justify-center items-center">
-                    <span className="text-white text-xl font-semibold">B</span>
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-xl font-semibold">Team B</h3>
-                    <p className="text-sm text-gray-400">Best odds: 2.05</p>
-                  </div>
+                <div className="mt-8 text-center">
+                  <button className="bg-purple-600 text-white px-6 py-3 rounded-full hover:bg-purple-700 transition">
+                    Place Your Bet
+                  </button>
                 </div>
-              </div>
-              <div className="mt-8 text-center">
-                <button className="bg-purple-600 text-white px-6 py-3 rounded-full hover:bg-purple-700 transition">
-                  Place Your Bet
-                </button>
               </div>
             </div>
-          </div>
-
-          {/* Grid 2 */}
-          <div className="bg-gradient-to-r from-transparent via-purple-300 to-transparent p-[1px] rounded-lg">
-            <div className="bg-gray-950 text-white rounded-lg p-6">
-              <h2 className="text-3xl font-bold text-center text-purple-300">Team X vs Team Y</h2>
-              <div className="flex justify-between items-center mt-6">
-                <div className="flex items-center">
-                  <div className="w-16 h-16 bg-purple-600 rounded-full flex justify-center items-center">
-                    <span className="text-white text-xl font-semibold">X</span>
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-xl font-semibold">Team X</h3>
-                    <p className="text-sm text-gray-400">Best odds: 1.90</p>
-                  </div>
-                </div>
-                <div className="text-xl text-gray-400 font-bold">VS</div>
-                <div className="flex items-center">
-                  <div className="w-16 h-16 bg-purple-600 rounded-full flex justify-center items-center">
-                    <span className="text-white text-xl font-semibold">Y</span>
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-xl font-semibold">Team Y</h3>
-                    <p className="text-sm text-gray-400">Best odds: 2.10</p>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-8 text-center">
-                <button className="bg-purple-600 text-white px-6 py-3 rounded-full hover:bg-purple-700 transition">
-                  Place Your Bet
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Grid 3 */}
-          <div className="bg-gradient-to-r from-transparent via-purple-300 to-transparent p-[1px] rounded-lg">
-            <div className="bg-gray-950 text-white rounded-lg p-6">
-              <h2 className="text-3xl font-bold text-center text-purple-300">Team M vs Team N</h2>
-              <div className="flex justify-between items-center mt-6">
-                <div className="flex items-center">
-                  <div className="w-16 h-16 bg-purple-600 rounded-full flex justify-center items-center">
-                    <span className="text-white text-xl font-semibold">M</span>
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-xl font-semibold">Team M</h3>
-                    <p className="text-sm text-gray-400">Best odds: 2.00</p>
-                  </div>
-                </div>
-                <div className="text-xl text-gray-400 font-bold">VS</div>
-                <div className="flex items-center">
-                  <div className="w-16 h-16 bg-purple-600 rounded-full flex justify-center items-center">
-                    <span className="text-white text-xl font-semibold">N</span>
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-xl font-semibold">Team N</h3>
-                    <p className="text-sm text-gray-400">Best odds: 1.75</p>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-8 text-center">
-                <button className="bg-purple-600 text-white px-6 py-3 rounded-full hover:bg-purple-700 transition">
-                  Place Your Bet
-                </button>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </main>
     </>

@@ -185,7 +185,9 @@ export default function Header() {
               )}
             </div>
           </div>
+          
         </motion.nav>
+        
       </header>
 
       {/* Spacer for header height */}
