@@ -294,8 +294,8 @@ export default function Header() {
             </div>
           </nav>
 
-          {/* Right Corner with DynamicWidget and Connect Wallet Button */}
-          <div className="flex items-center space-x-4">
+          {/* Right Corner with DynamicWidget and Connect Wallet Button (visible only on small and medium screens) */}
+          <div className="hidden md:flex items-center space-x-4">
             <DynamicWidget />
           </div>
 
@@ -334,7 +334,7 @@ export default function Header() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-80 z-40 flex flex-col items-center justify-center space-y-6"
+            className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-90 z-40 flex flex-col items-center justify-center space-y-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -342,18 +342,23 @@ export default function Header() {
           >
             <Link
               href="/"
-              className="text-white text-2xl"
+              className="text-white text-3xl font-semibold tracking-wider transition-transform transform hover:scale-105"
               onClick={toggleMenu}
             >
               Home
             </Link>
             <Link
               href="/my-bets"
-              className="text-white text-2xl"
+              className="text-white text-3xl font-semibold tracking-wider transition-transform transform hover:scale-105"
               onClick={toggleMenu}
             >
               My Bets
             </Link>
+
+            {/* Dynamic Widget (Login Button) visible only in mobile */}
+            <div className="mt-8">
+              <DynamicWidget />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
