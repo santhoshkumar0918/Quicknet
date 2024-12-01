@@ -76,11 +76,39 @@ export default function HomePage() {
               </h1>
               <div className="flex space-x-4">
                 <Link href="/create-your-own-bet">
-                  <button className="bg-gradient-to-r bg-purple-600 px-5 py-2.5 rounded-full mt-6 transition duration-300">
-                    Create Your Own Bet
+                  <button
+                    className="relative px-5 py-2.5 rounded-full text-white font-bold bg-opacity-10 bg-black backdrop-blur-md overflow-hidden"
+                    style={{
+                      position: "relative",
+                      isolation: "isolate",
+                    }}
+                  >
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        borderRadius: "9999px",
+                        background:
+                          "conic-gradient(from 0deg, purple, indigo, purple)",
+                        animation: "moveBorder 2s linear infinite",
+                        maskImage:
+                          "radial-gradient(circle, black 60%, transparent 80%)",
+                        WebkitMaskImage:
+                          "radial-gradient(circle, black 60%, transparent 80%)",
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        borderRadius: "9999px",
+                        background: "rgba(0, 0, 0, 0.5)",
+                        backdropFilter: "blur(12px)",
+                      }}
+                    />
+                    <span className="relative z-10">Create Your Own Bet</span>
                   </button>
                 </Link>
-              
               </div>
             </div>
           </div>
@@ -178,6 +206,18 @@ export default function HomePage() {
           decentralized transactions.
         </p>
       </footer>
+
+      {/* Inline Keyframes */}
+      <style jsx>{`
+        @keyframes moveBorder {
+          0% {
+            background-position: 0%;
+          }
+          100% {
+            background-position: 200%;
+          }
+        }
+      `}</style>
     </>
   );
 }
