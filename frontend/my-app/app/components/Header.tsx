@@ -173,27 +173,7 @@ export default function Header() {
           {/* Right Corner with DynamicWidget and Connect Wallet Button */}
           <div className="flex items-center space-x-4">
             <DynamicWidget />
-            {!walletAddress ? (
-              <button
-                onClick={handleConnectWallet}
-                disabled={isConnecting}
-                className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-6 rounded-full hover:bg-gradient-to-l focus:outline-none transition duration-300 transform hover:scale-105 shadow-md flex items-center"
-              >
-                {isConnecting ? (
-                  <span className="animate-spin text-lg">🔄</span>
-                ) : (
-                  <span>Connect Wallet</span>
-                )}
-              </button>
-            ) : (
-              <button
-                onClick={handleDisconnectWallet}
-                className="bg-red-500 text-white py-2 px-6 rounded-full hover:bg-red-700 focus:outline-none transition duration-300 transform hover:scale-105 shadow-md flex items-center"
-              >
-                Disconnect
-              </button>
-            )}
-          </div>
+           </div>
 
           {/* Mobile Menu Toggle */}
           <div className="md:hidden">
