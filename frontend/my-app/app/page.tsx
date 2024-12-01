@@ -46,30 +46,33 @@ export default function HomePage() {
         </div>
 
         {/* Tabs Section */}
+       
         <div className="flex justify-center mb-6">
-          <div className="bg-gradient-to-r from-gray-950 to-gray-300 via-gray-900 rounded-full p-2 flex space-x-4">
-            <button
-              onClick={() => setActiveTab("international")}
-              className={`px-6 py-2 rounded-full transition-transform transform hover:scale-105 border-2 ${
-                activeTab === "international"
-                  ? "bg-gradient-to-r from-purple-700 to-indigo-600 text-white border-white shadow-lg"
-                  : "text-gray-300 hover:text-white border-transparent hover:border-purple-600"
-              }`}
-            >
-              International Matchups
-            </button>
-            <button
-              onClick={() => setActiveTab("premierLeague")}
-              className={`px-6 py-2 rounded-full transition-transform transform hover:scale-105 border-2 ${
-                activeTab === "premierLeague"
-                  ? "bg-gradient-to-r from-purple-700 to-indigo-600 text-white border-white shadow-lg"
-                  : "text-gray-300 hover:text-white border-transparent hover:border-purple-600"
-              }`}
-            >
-              Premier League
-            </button>
-          </div>
-        </div>
+  <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 rounded-full p-2 flex space-x-4 border-2 border-white">
+    <button
+      onClick={() => setActiveTab("international")}
+      className={`px-6 py-2 rounded-full transition-transform transform hover:scale-105 border-2 ${
+        activeTab === "international"
+          ? "bg-gradient-to-r from-purple-700 to-indigo-600 text-white border-white shadow-lg"
+          : "text-gray-300 hover:text-white border-transparent hover:border-purple-600"
+      }`}
+    >
+      International Matchups
+    </button>
+    <button
+      onClick={() => setActiveTab("premierLeague")}
+      className={`px-6 py-2 rounded-full transition-transform transform hover:scale-105 border-2 ${
+        activeTab === "premierLeague"
+          ? "bg-gradient-to-r from-purple-700 to-indigo-600 text-white border-white shadow-lg"
+          : "text-gray-300 hover:text-white border-transparent hover:border-purple-600"
+      }`}
+    >
+      Premier League
+    </button>
+  </div>
+</div>
+
+
 
         {/* Tab Content */}
         <section className="flex justify-center">
