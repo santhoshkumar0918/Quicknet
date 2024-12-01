@@ -2,6 +2,7 @@
 
 import React from "react";
 import Header from "../components/Header";
+import { DynamicUserProfile } from "@dynamic-labs/sdk-react-core";
 
 function page() {
   const currentBets = [
@@ -29,8 +30,11 @@ function page() {
         <p className="text-gray-300 mt-4">
           Track and manage your ongoing and finished bets easily.
         </p>
-      </div>
+        <p>asdf</p>
+        <DynamicUserProfile />
 
+      </div>
+    
       <main className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Card Wrapper */}
         <div className="max-w-6xl mx-auto p-[2px] bg-gradient-to-br from-black via-purple-700 to-purple-400 rounded-lg shadow-lg">
