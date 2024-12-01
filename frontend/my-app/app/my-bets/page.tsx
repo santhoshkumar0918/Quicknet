@@ -128,9 +128,11 @@
 
 import React from "react";
 import Header from "../components/Header";
-import { DynamicUserProfile } from "@dynamic-labs/sdk-react-core";
+import { DynamicUserProfile, useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 function page() {
+  const { user } = useDynamicContext();
+
   const currentBets = [
     { game: "Bet on Game A", wager: "0.5 ETH", status: "Active", progress: 70 },
     { game: "Bet on Game B", wager: "0.3 ETH", status: "Pending", progress: 45 },
@@ -151,39 +153,31 @@ function page() {
       <Header />
 
       {/* User Profile Details */}
-      <div className="container mx-auto mt-32 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto bg-gradient-to-br from-black via-gray-800 to-purple-700 p-[1px] rounded-lg shadow-lg">
-          <div className="bg-gray-950 rounded-lg p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col items-center text-center">
-                <DynamicUserProfile />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-gradient-to-br from-black via-gray-800 to-purple-400 p-[1px] rounded-lg">
+          <div className="col-span-1 bg-gray-950 rounded-lg p-6 text-center">
+            <h2 className="text-xl font-bold text-purple-400 mb-4">User Profile</h2>
+            {user ? (
+              <div>
+                <p className="text-gray-300">Name: {user.displayName}</p>
+                <p className="text-gray-300">Email: {user.email}</p>
+                <p className="text-gray-300">Wallet Address: {user.walletAddress}</p>
+                <p className="text-gray-300">Last Login: {new Date(user.lastLogin).toLocaleString()}</p>
               </div>
-              <div className="flex flex-col justify-center">
-                <h2 className="text-xl font-bold text-purple-400 mb-2">
-                  Welcome Back!
-                </h2>
-                <p className="text-gray-300">
-                  Keep track of your bets and analyze your performance.
-                </p>
-                <p className="text-gray-400 mt-2">
-                  Total Profitable Bets: {profitableBets.length}
-                </p>
-                <p className="text-gray-400">
-                  Total Unprofitable Bets: {unprofitableBets.length}
-                </p>
-              </div>
-            </div>
+            ) : (
+              <p className="text-gray-400">Loading user details...</p>
+            )}
           </div>
         </div>
       </div>
 
       {/* Main Heading and Description */}
-      <div className="text-center py-8 mt-12">
+      <div className="text-center py-8 mt-16">
         <h1 className="text-4xl font-extrabold text-purple-400">My Bets</h1>
         <p className="text-gray-300 mt-2">Track and manage your bets effortlessly.</p>
+        <DynamicUserProfile />
       </div>
 
-      {/* Main Content */}
       <main className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto bg-gradient-to-br from-black via-purple-700 to-purple-400 p-[1px] rounded-lg shadow-lg">
           <div className="bg-gray-950 rounded-lg p-4">
@@ -193,10 +187,7 @@ function page() {
                 <h2 className="text-xl font-bold text-purple-400 mb-3 text-center">Current Bets</h2>
                 <div className="space-y-2">
                   {currentBets.map((bet, index) => (
-                    <div
-                      key={index}
-                      className="p-[1px] bg-gradient-to-br from-black via-gray-300 to-gray-100 rounded-md"
-                    >
+                    <div key={index} className="p-[1px] bg-gradient-to-br from-black via-gray-300 to-gray-100 rounded-md">
                       <div className="p-3 bg-gray-950 rounded-md hover:bg-gray-800 transition flex flex-col space-y-1">
                         <h3 className="text-lg font-semibold text-purple-300">{bet.game}</h3>
                         <p className="text-gray-400">Wager: {bet.wager}</p>
