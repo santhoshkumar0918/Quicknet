@@ -131,44 +131,44 @@
 //     </>
 //   );
 // }
-'use client';
-
+"use client"
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import Header from './components/Header';
 
 export default function HomePage() {
-  const [activeTab, setActiveTab] = useState("international");
+  const [activeTab, setActiveTab] = useState('international');
   const [matches, setMatches] = useState([]);
+
   
- 
-  const apiKey = "YOUR_API_KEY"; 
-  const baseUrl = "https://api.example.com"; 
-  const url = "/matches";  
+  const apiKey = process.env.NEXT_PUBLIC_API_KEY; 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;  
+
   
+  const url = `${baseUrl}/matches?apikey=${apiKey}`;
+
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        const response = await axios.get(`${baseUrl}${url}`, {
+        const response = await axios.get(url, {
           headers: {
-            "Authorization": `Bearer $  {apiKey}`,  
-            "Content-Type": "application/json", 
+            'Content-Type': 'application/json',
           },
         });
-       
-        setMatches(response.data.data);
+
+        
+        setMatches(response.data.data);  
       } catch (error) {
-        console.error("Error fetching data: ", error);
+        console.error('Error fetching data: ', error);
       }
     };
 
     fetchMatches();
-  }, [activeTab]);
+  }, [url]); 
 
-  
-  const internationalMatches = matches.filter(match => match.matchType === "odi");
-  const premierLeagueMatches = matches.filter(match => match.matchType === "ipl");
+  const internationalMatches = matches.filter((match) => match.matchType === 'odi');
+  const premierLeagueMatches = matches.filter((match) => match.matchType === 'ipl');
 
   return (
     <>
@@ -189,24 +189,25 @@ export default function HomePage() {
           </p>
         </div>
 
+        {/* Tabs Section */}
         <div className="flex justify-center mb-6">
           <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 rounded-full p-2 flex space-x-4 border-2 border-white">
             <button
-              onClick={() => setActiveTab("international")}
+              onClick={() => setActiveTab('international')}
               className={`px-6 py-2 rounded-full transition-transform transform hover:scale-105 border-2 ${
-                activeTab === "international"
-                  ? "bg-gradient-to-r from-purple-700 to-indigo-600 text-white border-white shadow-lg"
-                  : "text-gray-300 hover:text-white border-transparent hover:border-purple-600"
+                activeTab === 'international'
+                  ? 'bg-gradient-to-r from-purple-700 to-indigo-600 text-white border-white shadow-lg'
+                  : 'text-gray-300 hover:text-white border-transparent hover:border-purple-600'
               }`}
             >
               International Matchups
             </button>
             <button
-              onClick={() => setActiveTab("premierLeague")}
+              onClick={() => setActiveTab('premierLeague')}
               className={`px-6 py-2 rounded-full transition-transform transform hover:scale-105 border-2 ${
-                activeTab === "premierLeague"
-                  ? "bg-gradient-to-r from-purple-700 to-indigo-600 text-white border-white shadow-lg"
-                  : "text-gray-300 hover:text-white border-transparent hover:border-purple-600"
+                activeTab === 'premierLeague'
+                  ? 'bg-gradient-to-r from-purple-700 to-indigo-600 text-white border-white shadow-lg'
+                  : 'text-gray-300 hover:text-white border-transparent hover:border-purple-600'
               }`}
             >
               Premier League
@@ -217,7 +218,7 @@ export default function HomePage() {
         {/* Tab Content */}
         <section className="flex justify-center">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full px-4 sm:px-6 lg:px-8">
-            {(activeTab === "international" ? internationalMatches : premierLeagueMatches).map(
+            {(activeTab === 'international' ? internationalMatches : premierLeagueMatches).map(
               (match, index) => (
                 <div
                   key={index}
