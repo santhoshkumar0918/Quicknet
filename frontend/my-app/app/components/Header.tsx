@@ -266,7 +266,7 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation Centered */}
-          <nav className="hidden md:flex space-x-8 ml-28">
+          <nav className="hidden md:flex space-x-8 ml-32">
             <div
               onMouseEnter={() => handleMouseEnter('home')}
               onMouseLeave={handleMouseLeave}
@@ -329,6 +329,34 @@ export default function Header() {
           transition={{ duration: 0.5, ease: 'easeInOut' }}
         />
       </header>
+
+      {/* Mobile Navigation Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-80 z-40 flex flex-col items-center justify-center space-y-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Link
+              href="/"
+              className="text-white text-2xl"
+              onClick={toggleMenu}
+            >
+              Home
+            </Link>
+            <Link
+              href="/my-bets"
+              className="text-white text-2xl"
+              onClick={toggleMenu}
+            >
+              My Bets
+            </Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Toast Notification */}
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
