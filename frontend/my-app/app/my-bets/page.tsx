@@ -153,7 +153,7 @@ function page() {
       <Header />
 
       {/* User Profile Details */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="container mx-auto px-4 sm:px-6 mt-32 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-gradient-to-br from-black via-gray-800 to-purple-400 p-[1px] rounded-lg">
           <div className="col-span-1 bg-gray-950 rounded-lg p-6 text-center">
             <h2 className="text-xl font-bold text-purple-400 mb-4">User Profile</h2>
@@ -172,7 +172,7 @@ function page() {
       </div>
 
       {/* Main Heading and Description */}
-      <div className="text-center py-8 mt-16">
+      <div className="text-center py-8 mt-8">
         <h1 className="text-4xl font-extrabold text-purple-400">My Bets</h1>
         <p className="text-gray-300 mt-2">Track and manage your bets effortlessly.</p>
         <DynamicUserProfile />
