@@ -6,7 +6,6 @@ import axios from 'axios';
 import Image from 'next/image';
 import Header from './components/Header';
 
-// Define types for the match data structure
 interface Match {
   id: string;
   name: string;
@@ -26,7 +25,7 @@ interface Match {
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState('international');
-  const [matches, setMatches] = useState<Match[]>([]);  // Array of Match objects
+  const [matches, setMatches] = useState<Match[]>([]);  
 
   const apiKey = process.env.NEXT_PUBLIC_API_KEY;  
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;  
@@ -41,7 +40,7 @@ export default function HomePage() {
             'Content-Type': 'application/json',
           },
         });
-        setMatches(response.data.data);  // Assuming response.data.data contains matches
+        setMatches(response.data.data);  
       } catch (error) {
         console.error('Error fetching data: ', error);
       }
@@ -50,7 +49,6 @@ export default function HomePage() {
     fetchMatches();
   }, [url]);
 
-  // Filter matches based on match type (international or premier league)
   const internationalMatches = matches.filter((match) => match.matchType === 'odi');
   const premierLeagueMatches = matches.filter((match) => match.matchType === 'ipl');
 
@@ -100,7 +98,7 @@ export default function HomePage() {
 
         {/* Tab Content */}
         <section className="flex justify-center">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl w-full px-4 sm:px-6 lg:px-8">
             {(activeTab === 'international' ? internationalMatches : premierLeagueMatches).map(
               (match, index) => (
                 <div
@@ -108,25 +106,25 @@ export default function HomePage() {
                   className="relative bg-gradient-to-tr from-black via-purple-800 to-indigo-700 rounded-lg p-[1px] hover:scale-105 transition-transform duration-300 border-2 border-transparent hover:border-purple-600"
                 >
                   <div className="bg-gray-900 text-white rounded-lg p-4">
-                    <h2 className="text-2xl font-bold text-center text-gradient">{match.name}</h2>
+                    <h2 className="text-xl font-bold text-center text-gradient">{match.name}</h2>
                     <div className="flex justify-between items-center mt-4">
                       <div className="flex items-center">
-                        <div className="w-14 h-14 bg-purple-600 rounded-full flex justify-center items-center transition-transform transform hover:scale-110">
-                          <span className="text-white text-lg font-semibold">{match.teams[0]}</span>
+                        <div className="w-16 h-16 bg-purple-600 rounded-full flex justify-center items-center transition-transform transform hover:scale-110">
+                          <span className="text-white text-sm font-semibold">{match.teams[0]}</span>
                         </div>
                         <div className="ml-3">
-                          <h3 className="text-lg font-semibold">{match.teams[0]}</h3>
-                          <p className="text-sm text-gray-400">Best odds: 1.80</p>
+                          <h3 className="text-sm font-semibold">{match.teams[0]}</h3>
+                          <p className="text-xs text-gray-400">Best odds: 1.80</p>
                         </div>
                       </div>
                       <div className="text-lg text-gray-400 font-bold">VS</div>
                       <div className="flex items-center">
-                        <div className="w-14 h-14 bg-purple-600 rounded-full flex justify-center items-center transition-transform transform hover:scale-110">
-                          <span className="text-white text-lg font-semibold">{match.teams[1]}</span>
+                        <div className="w-16 h-16 bg-purple-600 rounded-full flex justify-center items-center transition-transform transform hover:scale-110">
+                          <span className="text-white text-sm font-semibold">{match.teams[1]}</span>
                         </div>
                         <div className="ml-3">
-                          <h3 className="text-lg font-semibold">{match.teams[1]}</h3>
-                          <p className="text-sm text-gray-400">Best odds: 2.05</p>
+                          <h3 className="text-sm font-semibold">{match.teams[1]}</h3>
+                          <p className="text-xs text-gray-400">Best odds: 2.05</p>
                         </div>
                       </div>
                     </div>
