@@ -164,12 +164,11 @@ function Page() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      setIsLoading(false); // Set loading to false when user data is available
+    if (user !== undefined) {
+      setIsLoading(false);
     }
   }, [user]);
 
-  // Sample bets data
   const currentBets = [
     { game: "Bet on Game A", wager: "0.5 ETH", status: "Active", progress: 70 },
     { game: "Bet on Game B", wager: "0.3 ETH", status: "Pending", progress: 45 },
@@ -203,18 +202,18 @@ function Page() {
             {isLoading ? (
               <p className="text-gray-500 text-center">Loading user details...</p>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <p><strong>Username:</strong> {user?.username || "N/A"}</p>
-                  <p><strong>Email:</strong> {user?.email || "N/A"}</p>
-                
+              user ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <p><strong>Username:</strong> {user.username || "N/A"}</p>
+                  </div>
+                  <div>
+                    <p><strong>User ID:</strong> {user.userId || "N/A"}</p>
+                  </div>
                 </div>
-                <div>
-                  
-                  <p><strong>User ID:</strong> {user?.userId || "N/A"}</p>
-               
-                </div>
-              </div>
+              ) : (
+                <p className="text-gray-500 text-center">User data unavailable</p>
+              )
             )}
           </div>
         </div>
@@ -238,7 +237,7 @@ function Page() {
                         <div className="bg-gray-700 rounded-full h-1">
                           <div
                             className="bg-purple-500 h-1 rounded-full"
-                            style={{ width: `${bet.progress}%` }}
+                            style={{ width: `${Math.min(Math.max(bet.progress, 0), 100)}%` }}
                           />
                         </div>
                       </div>
