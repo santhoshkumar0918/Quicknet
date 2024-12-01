@@ -206,10 +206,11 @@ import Link from 'next/link';
 import { RpcProvider } from 'starknet';
 import { ChevronDown, Copy, LogOut } from 'lucide-react';
 import { DynamicWidget } from '@dynamic-labs/sdk-react-core';
+import '../components/dynamic-widget.css'
 
 interface ToastProps {
   message: string;
-  type?: 'success' | 'error' | 'info';  // You can extend this as needed
+  type?: 'success' | 'error' | 'info';  
   onClose: () => void;
 }
 
@@ -367,7 +368,7 @@ export default function Header() {
 
           {/* Right Corner with DynamicWidget and Connect Wallet Button */}
           <div className="flex items-center space-x-4">
-            <DynamicWidget />
+            <DynamicWidget  buttonClassName="custom-dynamic-widget-button" /> {/* Custom Class Applied */}
             {!walletAddress ? (
               <button
                 onClick={handleConnectWallet}
@@ -414,3 +415,4 @@ export default function Header() {
     </>
   );
 }
+

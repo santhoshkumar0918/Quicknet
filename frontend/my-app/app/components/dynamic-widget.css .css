@@ -1,0 +1,20 @@
+.custom-dynamic-widget-button .sign-in-button {
+    background: linear-gradient(135deg, #6EE7B7, #3B82F6); /* Gradient background */
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  .custom-dynamic-widget-button .sign-in-button:hover {
+    background: linear-gradient(135deg, #3B82F6, #6EE7B7);
+    transform: scale(1.05); /* Slight scale effect on hover */
+  }
+  
+  .custom-dynamic-widget-button .sign-in-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Blue focus ring */
+  }
+  
