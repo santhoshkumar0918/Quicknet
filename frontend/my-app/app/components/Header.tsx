@@ -203,11 +203,9 @@
 
 import { useState, useEffect } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { RpcProvider } from 'starknet';
-import { ChevronDown, Copy, LogOut } from 'lucide-react';
 import { DynamicWidget } from '@dynamic-labs/sdk-react-core';
 
 interface ToastProps {
@@ -241,10 +239,6 @@ const Toast: React.FC<ToastProps> = ({ message, type = 'success', onClose }) => 
 export default function Header() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
-  const [walletAddress, setWalletAddress] = useState<string | null>(null);
-  const [isConnecting, setIsConnecting] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [toast, setToast] = useState<{ message: string; type?: 'success' | 'error' | 'info' } | null>(null);
 
   const toggleMenu = () => {
@@ -253,11 +247,6 @@ export default function Header() {
 
   const handleMouseEnter = (link: string) => setHoveredLink(link);
   const handleMouseLeave = () => setHoveredLink(null);
-
-  const showToast = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 2000);
-  };
 
   return (
     <>
@@ -289,15 +278,6 @@ export default function Header() {
               >
                 Home
               </Link>
-              {hoveredLink === 'home' && (
-                <motion.div
-                  className="absolute bottom-[-4px] left-0 h-[2px] w-full bg-white"
-                  initial={{ width: 0 }}
-                  animate={{ width: '100%' }}
-                  exit={{ width: 0 }}
-                  transition={{ duration: 0.3 }}
-                />
-              )}
             </div>
 
             <div
@@ -311,15 +291,6 @@ export default function Header() {
               >
                 My Bets
               </Link>
-              {hoveredLink === 'my-bets' && (
-                <motion.div
-                  className="absolute bottom-[-4px] left-0 h-[2px] w-full bg-white"
-                  initial={{ width: 0 }}
-                  animate={{ width: '100%' }}
-                  exit={{ width: 0 }}
-                  transition={{ duration: 0.3 }}
-                />
-              )}
             </div>
           </nav>
 
@@ -344,7 +315,19 @@ export default function Header() {
         </div>
 
         {/* Fixed Gradient Line */}
-        <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-purple-300 to-transparent" />
+        <motion.div
+          className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-purple-300 to-transparent"
+          initial={{ x: '-100%' }}
+          animate={{
+            x:
+              hoveredLink === 'home'
+                ? '-25%'
+                : hoveredLink === 'my-bets'
+                ? '25%'
+                : '0%',
+          }}
+          transition={{ duration: 0.5, ease: 'easeInOut' }}
+        />
       </header>
 
       {/* Toast Notification */}
