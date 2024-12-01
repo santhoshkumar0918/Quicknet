@@ -1,6 +1,4 @@
-
 'use client';
-
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
@@ -57,14 +55,18 @@ export default function HomePage() {
       <Header />
       <main className="mt-[10vh] p-4">
         <div className="flex flex-col items-center justify-center mb-10">
-          <Image
-            src="/images/cricket.webp"
-            alt="Cricket Betting Market"
-            width={600}
-            height={400}
-            className="rounded-lg w-[1500px] h-[42vh] shadow-lg"
-          />
-          <h1 className="text-4xl font-bold text-gray-100 mt-6">Welcome to Cricket Betting Market</h1>
+          <div className="relative w-full h-[42vh]">
+            <Image
+              src="/images/cricket.webp"
+              alt="Cricket Betting Market"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-lg shadow-lg"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+              <h1 className="text-4xl font-bold text-white">Welcome to Cricket Betting Market</h1>
+            </div>
+          </div>
           <p className="text-lg text-gray-400 mt-4 text-center">
             Bet on your favorite cricket matches with Web3, powered by StarkNet.
           </p>
