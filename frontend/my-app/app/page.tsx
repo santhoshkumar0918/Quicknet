@@ -183,20 +183,20 @@ export default function HomePage() {
           <div className="bg-gradient-to-r from-gray-950 to-gray-300 via-gray-900 rounded-full p-2 flex space-x-4">
             <button
               onClick={() => setActiveTab("international")}
-              className={`px-6 py-2 rounded-full transition-transform transform hover:scale-105 ${
+              className={`px-6 py-2 rounded-full transition-transform transform hover:scale-105 border-2 ${
                 activeTab === "international"
-                  ? "bg-gradient-to-r from-purple-700 to-indigo-600 text-white shadow-lg"
-                  : "text-gray-300 hover:text-white"
+                  ? "bg-gradient-to-r from-purple-700 to-indigo-600 text-white border-white shadow-lg"
+                  : "text-gray-300 hover:text-white border-transparent hover:border-purple-600"
               }`}
             >
               International Matchups
             </button>
             <button
               onClick={() => setActiveTab("premierLeague")}
-              className={`px-6 py-2 rounded-full transition-transform transform hover:scale-105 ${
+              className={`px-6 py-2 rounded-full transition-transform transform hover:scale-105 border-2 ${
                 activeTab === "premierLeague"
-                  ? "bg-gradient-to-r from-purple-700 to-indigo-600 text-white shadow-lg"
-                  : "text-gray-300 hover:text-white"
+                  ? "bg-gradient-to-r from-purple-700 to-indigo-600 text-white border-white shadow-lg"
+                  : "text-gray-300 hover:text-white border-transparent hover:border-purple-600"
               }`}
             >
               Premier League
@@ -211,7 +211,7 @@ export default function HomePage() {
               (match, index) => (
                 <div
                   key={index}
-                  className="relative bg-gradient-to-tr from-black via-purple-800 to-indigo-700 rounded-lg p-[1px] hover:scale-105 transition-transform duration-300"
+                  className="relative bg-gradient-to-tr from-black via-purple-800 to-indigo-700 rounded-lg p-[1px] hover:scale-105 transition-transform duration-300 border-2 border-transparent hover:border-purple-600"
                 >
                   <div className="bg-gray-900 text-white rounded-lg p-4">
                     <h2 className="text-2xl font-bold text-center text-gradient">{match}</h2>
