@@ -143,7 +143,6 @@
 //                 className="rounded-full"
 //               />
 //             </Link>
-//             <DynamicWidget />
 //           </div>
 
 //           {/* Desktop Navigation Centered */}
@@ -168,51 +167,9 @@
 //             </div>
 //           </nav>
 
-//           {/* Right Corner Buttons */}
+//           {/* Right Corner with DynamicWidget */}
 //           <div className="flex items-center space-x-4">
-//             {error && <span className="text-red-500">{error}</span>}
-//             <button
-//               onClick={walletAddress ? toggleDropdown : handleConnectWallet}
-//               disabled={isConnecting}
-//               className={`text-gray-300 hover:text-white transition duration-300 text-lg border-2 border-gray-300 px-4 py-2 rounded-full ${
-//                 isConnecting ? 'opacity-50 cursor-not-allowed' : ''
-//               }`}
-//             >
-//               {isConnecting
-//                 ? 'Connecting...'
-//                 : walletAddress
-//                 ? `${walletAddress.slice(0, 6)}...`
-//                 : 'Connect Wallet'}
-//               {walletAddress && (
-//                 <ChevronDown
-//                   className={`ml-2 transition-transform duration-200 ${
-//                     dropdownOpen ? 'rotate-180' : ''
-//                   }`}
-//                   size={16}
-//                 />
-//               )}
-//             </button>
-
-//             {/* Wallet Dropdown Menu */}
-//             {walletAddress && dropdownOpen && (
-//               <div className="absolute top-[11vh] right-4 mt-2 bg-gray-950 bg-opacity-80 text-white rounded-lg shadow-lg p-4 space-y-2">
-//                 <div className="text-sm">
-//                   <strong>Wallet Address:</strong> {walletAddress}
-//                 </div>
-//                 <button
-//                   onClick={handleDisconnectWallet}
-//                   className="w-[100px] text-center bg-red-500 text-white py-2 rounded-md hover:bg-red-600"
-//                 >
-//                   Disconnect
-//                 </button>
-//                 <button
-//                   onClick={copyWalletAddress}
-//                   className="w-[100px] text-center bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
-//                 >
-//                   Copy Address
-//                 </button>
-//               </div>
-//             )}
+//             <DynamicWidget />
 //           </div>
 
 //           {/* Mobile Menu Toggle */}
@@ -235,7 +192,7 @@
 //       </header>
 
 //       {/* Toast Notification */}
-//         {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+//       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 //     </>
 //   );
 // }
@@ -247,7 +204,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { RpcProvider } from 'starknet';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Copy, LogOut } from 'lucide-react';
 import { DynamicWidget } from '@dynamic-labs/sdk-react-core';
 
 interface ToastProps {
@@ -308,6 +265,48 @@ export default function Header() {
     setTimeout(() => setToast(null), 2000);
   };
 
+  const handleConnectWallet = async () => {
+    setIsConnecting(true);
+    setError(null);
+
+    try {
+      const starknet = (window as any).starknet;
+      if (!starknet) {
+        setError('No StarkNet wallet detected. Please install Argent X or a compatible wallet.');
+        setIsConnecting(false);
+        return;
+      }
+
+      const connection = await starknet.enable({
+        dappName: 'QuickNet',
+      });
+
+      if (!connection || connection.length === 0) {
+        setError('Connection failed. Please check your wallet and try again.');
+        setIsConnecting(false);
+        return;
+      }
+
+      const address = connection[0];
+      const provider = new RpcProvider({
+        nodeUrl: 'https://starknet-mainnet.public.blastapi.io',
+      });
+
+      try {
+        await provider.getBlock();
+        setWalletAddress(address);
+        showToast('Wallet connected successfully');
+      } catch {
+        setError('Could not validate wallet connection.');
+      }
+    } catch (connectError) {
+      console.error('Wallet Connection Error:', connectError);
+      setError('An unexpected error occurred while connecting.');
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
   const handleDisconnectWallet = () => {
     setWalletAddress(null);
     setError(null);
@@ -342,7 +341,6 @@ export default function Header() {
                 className="rounded-full"
               />
             </Link>
-            <DynamicWidget />
           </div>
 
           {/* Desktop Navigation Centered */}
@@ -367,29 +365,28 @@ export default function Header() {
             </div>
           </nav>
 
-          {/* Right Corner Buttons */}
+          {/* Right Corner with DynamicWidget and Connect Wallet Button */}
           <div className="flex items-center space-x-4">
-            {error && <span className="text-red-500">{error}</span>}
-
-            {/* Wallet Dropdown Menu (if wallet is connected) */}
-            {walletAddress && dropdownOpen && (
-              <div className="absolute top-[11vh] right-4 mt-2 bg-gray-950 bg-opacity-80 text-white rounded-lg shadow-lg p-4 space-y-2">
-                <div className="text-sm">
-                  <strong>Wallet Address:</strong> {walletAddress}
-                </div>
-                <button
-                  onClick={handleDisconnectWallet}
-                  className="w-[100px] text-center bg-red-500 text-white py-2 rounded-md hover:bg-red-600"
-                >
-                  Disconnect
-                </button>
-                <button
-                  onClick={copyWalletAddress}
-                  className="w-[100px] text-center bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
-                >
-                  Copy Address
-                </button>
-              </div>
+            <DynamicWidget />
+            {!walletAddress ? (
+              <button
+                onClick={handleConnectWallet}
+                disabled={isConnecting}
+                className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-6 rounded-full hover:bg-gradient-to-l focus:outline-none transition duration-300 transform hover:scale-105 shadow-md flex items-center"
+              >
+                {isConnecting ? (
+                  <span className="animate-spin text-lg">🔄</span>
+                ) : (
+                  <span>Connect Wallet</span>
+                )}
+              </button>
+            ) : (
+              <button
+                onClick={handleDisconnectWallet}
+                className="bg-red-500 text-white py-2 px-6 rounded-full hover:bg-red-700 focus:outline-none transition duration-300 transform hover:scale-105 shadow-md flex items-center"
+              >
+                Disconnect
+              </button>
             )}
           </div>
 
