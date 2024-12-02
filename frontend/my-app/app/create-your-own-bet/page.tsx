@@ -69,8 +69,8 @@
 //     </div>
 //   );
 // }
-
 // export default Page;
+
 "use client";
 
 import React, { useState } from "react";
@@ -80,26 +80,21 @@ function Page() {
   const [messages, setMessages] = useState<{ sender: "user" | "ai"; text: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Predefined prompts
   const prompts = [
-    "What's the weather today?",
-    "Tell me a joke!",
-    "Give me a fun fact!",
+    "easy",
+    "ordinary",
+    "impossible",
   ];
 
-  // Handle sending the selected prompt
   const handleSend = (prompt: string) => {
-    // Add user message
     setMessages((prevMessages) => [...prevMessages, { sender: "user", text: prompt }]);
 
-    // Show loading message
     setIsLoading(true);
 
-    // Simulate AI response
     setTimeout(() => {
       setMessages((prevMessages) => [
         ...prevMessages,
-        { sender: "ai", text: "Loading..." }, // Placeholder for AI response
+        { sender: "ai", text: "Loading..." }, 
       ]);
       setIsLoading(false);
     }, 1000);
@@ -144,8 +139,8 @@ function Page() {
       </div>
 
       {/* Prompt Options */}
-      <div className="w-full max-w-2xl fixed bottom-0 bg-gray-800 p-4 rounded-t-lg shadow-lg flex justify-around">
-        {prompts.map((prompt, index) => (
+      <div className="w-full max-w-2xl fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 p-4 rounded-lg shadow-lg flex justify-center items-center space-x-4">
+      {prompts.map((prompt, index) => (
           <button
             key={index}
             onClick={() => handleSend(prompt)}
