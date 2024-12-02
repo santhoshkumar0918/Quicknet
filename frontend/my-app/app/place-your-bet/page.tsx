@@ -1,39 +1,59 @@
 "use client";
 
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function PlaceYourBetPage() {
+export default function PlaceYourBet() {
   const router = useRouter();
-  const [matchName, setMatchName] = useState<string | null>(null);
-  const [betAmount, setBetAmount] = useState<string | null>(null);
+  const [betAmount, setBetAmount] = useState("");
+  const [isPlacingBet, setIsPlacingBet] = useState(false);
 
-  useEffect(() => {
-    if (router.query) {
-      setMatchName(router.query.matchName as string);
-      setBetAmount(router.query.betAmount as string);
+  const handlePlaceBet = () => {
+    if (!betAmount) {
+      alert("Please enter a bet amount!");
+      return;
     }
-  }, [router.query]);
-
-  const handleBackToHome = () => {
-    router.push("/");
+    setIsPlacingBet(true);
+    setTimeout(() => {
+      setIsPlacingBet(false);
+      alert(`Bet placed successfully with amount: ${betAmount}`);
+      router.push("/");
+    }, 2000);
   };
 
   return (
-    <main className="flex items-center justify-center h-screen bg-gray-900 text-white">
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full">
-        <h1 className="text-2xl font-bold mb-4">Bet Placed Successfully!</h1>
-        <p className="mb-2">
-          <strong>Match:</strong> {matchName || "Unknown"}
-        </p>
-        <p className="mb-4">
-          <strong>Bet Amount:</strong> {betAmount || "Unknown"} tokens
-        </p>
+    <main className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-6">
+      <div className="bg-gray-800 rounded-lg shadow-lg p-8 max-w-md w-full">
+        <h1 className="text-2xl font-bold mb-6 text-center">Place Your Bet</h1>
+        <div className="mb-4">
+          <label htmlFor="betAmount" className="block text-gray-400 mb-2">
+            Enter Bet Amount:
+          </label>
+          <input
+            id="betAmount"
+            type="number"
+            value={betAmount}
+            onChange={(e) => setBetAmount(e.target.value)}
+            className="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white"
+            placeholder="Enter your amount"
+          />
+        </div>
         <button
-          onClick={handleBackToHome}
-          className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white px-5 py-2.5 rounded-full hover:from-purple-700 hover:to-indigo-800 transition duration-300"
+          onClick={handlePlaceBet}
+          disabled={isPlacingBet}
+          className={`w-full py-3 mt-4 rounded-lg font-bold ${
+            isPlacingBet
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800"
+          }`}
         >
-          Back to Home
+          {isPlacingBet ? "Placing Bet..." : "Place Bet"}
+        </button>
+        <button
+          onClick={() => router.push("/")}
+          className="w-full py-3 mt-4 rounded-lg bg-gray-600 hover:bg-gray-700"
+        >
+          Cancel
         </button>
       </div>
     </main>

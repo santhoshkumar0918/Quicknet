@@ -90,12 +90,12 @@
 //   const internationalMatches = matches.filter((match) => match.matchType === "odi" , "t20");
 //   const premierLeagueMatches = matches.filter((match) => match.matchType === "ipl");
 
-//   const handleButtonClick = () => {
-//     setIsLoading(true);
-//     setTimeout(() => {
-//       setIsLoading(false);
-//     }, 2000);
-//   };
+  // const handleButtonClick = () => {
+  //   setIsLoading(true);
+  //   setTimeout(() => {
+  //     setIsLoading(false);
+  //   }, 2000);
+  // };
 
 //   return (
 //     <>
@@ -222,7 +222,8 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "./components/Header";
@@ -233,56 +234,123 @@ interface Match {
   name: string;
   matchType: string;
   status: string;
+  venue: string;
+  date: string;
+  dateTimeGMT: string;
+  teams: string[];
+  series_id: string;
+  fantasyEnabled: boolean;
+  bbbEnabled: boolean;
+  hasSquad: boolean;
+  matchStarted: boolean;
+  matchEnded: boolean;
+}
+
+interface VoteState {
+  [matchId: string]: { yes: number; no: number };
 }
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState("international");
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
-  const [betAmount, setBetAmount] = useState("");
+  const [matches, setMatches] = useState<Match[]>([]);
+  const [votes, setVotes] = useState<VoteState>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const mockMatches: Match[] = [
-    { id: "1", name: "India vs Australia", matchType: "international", status: "Upcoming" },
-    { id: "2", name: "England vs Pakistan", matchType: "international", status: "Live" },
-    { id: "3", name: "Mumbai Indians vs CSK", matchType: "premierLeague", status: "Completed" },
-    { id: "4", name: "RCB vs KKR", matchType: "premierLeague", status: "Upcoming" },
+    { id: "1", name: "India vs Australia", matchType: "odi", status: "Upcoming", venue: "Delhi", date: "2024-12-15", dateTimeGMT: "", teams: [], series_id: "", fantasyEnabled: true, bbbEnabled: true, hasSquad: true, matchStarted: false, matchEnded: false },
+    { id: "2", name: "England vs Pakistan", matchType: "t20", status: "Live", venue: "London", date: "2024-12-16", dateTimeGMT: "", teams: [], series_id: "", fantasyEnabled: true, bbbEnabled: true, hasSquad: true, matchStarted: true, matchEnded: false },
+    { id: "3", name: "Mumbai Indians vs CSK", matchType: "ipl", status: "Upcoming", venue: "Mumbai", date: "2024-12-17", dateTimeGMT: "", teams: [], series_id: "", fantasyEnabled: true, bbbEnabled: true, hasSquad: true, matchStarted: false, matchEnded: false },
   ];
 
-  const handlePlaceBet = (match: Match) => {
-    setSelectedMatch(match);
-    setIsPopupOpen(true);
+  useEffect(() => {
+    // Mock data for matches (replace with actual API call if needed)
+    setMatches(mockMatches);
+    const initialVotes = mockMatches.reduce<VoteState>((acc, match) => {
+      acc[match.id] = { yes: 0, no: 0 };
+      return acc;
+    }, {});
+    setVotes(initialVotes);
+  }, []);
+
+  const handleVote = (matchId: string, voteType: "yes" | "no") => {
+    setVotes((prevVotes) => {
+      const updatedVotes = { ...prevVotes };
+      updatedVotes[matchId][voteType]++;
+      return updatedVotes;
+    });
   };
 
-  const handleConfirmBet = () => {
-    setIsPopupOpen(false);
-    setBetAmount("");
-    alert(`Bet of ${betAmount} placed on match: ${selectedMatch?.name}`);
+  const calculatePercentage = (matchId: string) => {
+    const { yes, no } = votes[matchId] || { yes: 0, no: 0 };
+    const totalVotes = yes + no;
+    if (totalVotes === 0) return { yes: 0, no: 0 };
+    return {
+      yes: Math.round((yes / totalVotes) * 100),
+      no: Math.round((no / totalVotes) * 100),
+    };
   };
 
-  const filteredMatches = mockMatches.filter(
-    (match) => match.matchType === (activeTab === "international" ? "international" : "premierLeague")
-  );
+  const internationalMatches = matches.filter((match) => match.matchType === "odi" || match.matchType === "t20");
+  const premierLeagueMatches = matches.filter((match) => match.matchType === "ipl");
 
+  const handleButtonClick = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  };
+  
   return (
     <>
       <Header />
-      <main className="mt-[10vh] p-4 sm:p-6 lg:p-8">
-        <div className="flex flex-col items-center justify-center mb-10">
-          <div className="relative w-full h-[30vh] sm:h-[40vh] lg:h-[50vh]">
-            <Image
-              src="/images/cricket.webp"
-              alt="Cricket Betting Market"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-lg shadow-lg"
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center px-4 sm:px-6">
-              <h1 className="text-4xl sm:text-3xl font-bold text-white mb-4 text-center">
-                Welcome to Cricket Betting Market
-              </h1>
-            </div>
-          </div>
-        </div>
+       <main className="mt-[10vh] p-4 sm:p-6 lg:p-8">
+         <div className="flex flex-col items-center justify-center mb-10">
+           <div className="relative  w-full h-[30vh] sm:h-[40vh] lg:h-[50vh]">
+             <Image
+               src="/images/cricket.webp"
+               alt="Cricket Betting Market"
+               layout="fill"
+               objectFit="cover"
+               className="rounded-lg h-[12vh] shadow-lg"
+             />
+             <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center px-4 sm:px-6">
+               <h1 className="text-4xl sm:text-3xl font-bold text-white mb-4 text-center">
+                 Welcome to Cricket Betting Market
+               </h1>
+               <div className="flex space-x-4">
+                 <Link href="/create-your-own-bet">
+                   <motion.button
+                     onClick={handleButtonClick}
+                     className={`relative px-6 py-3 rounded-full border-2 border-white text-white font-semibold transition duration-300 ${
+                       isLoading ? "pointer-events-none" : ""
+                     }`}
+                     whileHover={{ scale: 1.05 }}
+                     whileTap={{ scale: 0.95 }}
+                     disabled={isLoading}
+                   >
+                     {isLoading ? (
+                       <motion.div
+                         className="absolute inset-0 border-2 border-white rounded-full animate-spin"
+                         initial={{ borderColor: "rgba(255, 255, 255, 0.5)" }}
+                         animate={{ borderColor: "rgba(255, 255, 255, 1)" }}
+                         transition={{
+                           duration: 1,
+                           repeat: Infinity,
+                           ease: "linear",
+                         }}
+                       />
+                     ) : (
+                       "Create Your Own Bet"
+                     )}
+                     <span className="relative z-10">
+                       {isLoading ? "Loading..." : ""}
+                     </span>
+                   </motion.button>
+                 </Link>
+               </div>
+             </div>
+           </div>
+       </div>
 
         {/* Tabs Section */}
         <div className="flex justify-center mb-6">
@@ -310,59 +378,50 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Matches Grid */}
+        {/* Tab Content */}
         <section className="flex justify-center">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl w-full px-4 sm:px-6 lg:px-8">
-            {filteredMatches.map((match) => (
+            {(activeTab === "international" ? internationalMatches : premierLeagueMatches).map((match) => (
               <div
                 key={match.id}
-                className="bg-gray-900 text-white rounded-lg p-4 shadow-lg hover:scale-105 transition-transform"
+                className="relative bg-gradient-to-tr from-black via-purple-800 to-indigo-700 rounded-lg p-[1px] hover:scale-105 transition-transform duration-300 border-2 border-transparent hover:border-purple-600"
               >
-                <h2 className="text-xl sm:text-2xl font-bold">{match.name}</h2>
-                <p className="mt-2 text-sm">{match.status}</p>
-                <button
-                  onClick={() => handlePlaceBet(match)}
-                  className="mt-4 bg-gradient-to-r from-purple-600 to-indigo-700 text-white px-5 py-2.5 rounded-full hover:from-purple-700 hover:to-indigo-800 transition duration-300"
-                >
-                  Place Your Bet
-                </button>
+                <div className="bg-gray-900 text-white rounded-lg p-4">
+                  <h2 className="text-xl sm:text-2xl font-bold text-center text-gradient">{match.name}</h2>
+                  <div className="flex justify-between items-center mt-4">
+                    <button
+                      onClick={() => handleVote(match.id, "yes")}
+                      className={`w-[130px] sm:w-[150px] text-center py-2 rounded-full text-white font-bold ${
+                        votes[match.id]?.yes > 0 ? "bg-green-400" : "bg-gray-600"
+                      }`}
+                    >
+                      Yes ({calculatePercentage(match.id).yes}%)
+                    </button>
+                    <button
+                      onClick={() => handleVote(match.id, "no")}
+                      className={`w-[130px] sm:w-[150px] text-center py-2 rounded-full text-white font-bold ${
+                        votes[match.id]?.no > 0 ? "bg-red-400" : "bg-gray-600"
+                      }`}
+                    >
+                      No ({calculatePercentage(match.id).no}%)
+                    </button>
+                  </div>
+                  <div className="mt-6 text-center">
+                    <Link href="/place-your-bet">
+                      <motion.button
+                        className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white px-5 py-2.5 rounded-full hover:from-purple-700 hover:to-indigo-800 transition duration-300"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        Place Your Bet
+                      </motion.button>
+                    </Link>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </section>
-
-        {/* Popup for Betting */}
-        {isPopupOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-gray-900 text-white rounded-lg p-6 w-[90%] max-w-md">
-              <h2 className="text-xl font-bold mb-4">Place Your Bet</h2>
-              <p className="mb-4">{`Match: ${selectedMatch?.name}`}</p>
-              <input
-                type="number"
-                value={betAmount}
-                onChange={(e) => setBetAmount(e.target.value)}
-                placeholder="Enter bet amount"
-                className="w-full px-4 py-2 mb-4 rounded-lg bg-gray-800 text-white"
-              />
-              <div className="flex justify-between">
-                <button
-                  onClick={() => setIsPopupOpen(false)}
-                  className="bg-red-600 text-white px-4 py-2 rounded-lg"
-                >
-                  Cancel
-                </button>
-                <Link href="/place-your-bet">
-                  <button
-                    onClick={handleConfirmBet}
-                    className="bg-green-600 text-white px-4 py-2 rounded-lg"
-                  >
-                    Confirm
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
       </main>
     </>
   );
