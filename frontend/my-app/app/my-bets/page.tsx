@@ -35,7 +35,7 @@ function Page() {
       </div>
 
       {/* User Profile Section */}
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+       { user &&( <div className="container mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="max-w-4xl mx-auto bg-gradient-to-br from-black via-purple-700 to-purple-400 p-[1px] rounded-lg shadow-lg">
             <div className="bg-gray-950 rounded-lg p-6">
               <h2 className="text-2xl font-bold text-purple-400 mb-4 text-center">User Profile</h2>
@@ -55,7 +55,7 @@ function Page() {
               )}
             </div>
           </div>
-        </div>
+        </div>)}
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto bg-gradient-to-br from-black via-purple-700 to-purple-400 p-[1px] rounded-lg shadow-lg">
