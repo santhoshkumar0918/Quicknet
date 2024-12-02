@@ -88,14 +88,14 @@ export default function HomePage() {
     <>
        <Header />
        <main className="mt-[10vh] p-4 bg-gray-950 sm:p-6 lg:p-8">
-         <div className="flex flex-col items-center justify-center mb-10">
+         <div className="flex flex-col items-center justify-center mb-8">
            <div className="relative  w-full h-[30vh] sm:h-[40vh] lg:h-[50vh]">
              <Image
                src="/images/cricket.webp"
                alt="Cricket Betting Market"
                layout="fill"
                objectFit="cover"
-               className="rounded-lg h-[12vh] shadow-lg"
+               className="rounded-lg h-[12vh] w-full shadow-lg"
              />
              <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center px-4 sm:px-6">
                <h1 className="text-4xl sm:text-3xl font-bold text-white mb-4 text-center">
