@@ -1,6 +1,7 @@
 
-"use client"
-import React, { useState, useEffect } from "react";
+"use client";
+
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,7 +10,7 @@ import { motion } from "framer-motion";
 
 interface Match {
   id: string;
-  name: string;
+    name: string;
   matchType: string;
   status: string;
   venue: string;
@@ -23,6 +24,9 @@ interface Match {
   matchStarted: boolean;
   matchEnded: boolean;
 }
+interface VoteState {
+  [matchId: string]: { yes: number; no: number };
+}
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState("international");
@@ -34,34 +38,32 @@ export default function HomePage() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const url = `${baseUrl}/matches?apikey=${apiKey}`;
 
+ 
+  
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        const response = await axios.get(url, {
+        const response = await axios.get<{ data: Match[] }>(url, {
           headers: {
             "Content-Type": "application/json",
           },
         });
-
-        const fetchedMatches = response.data.data;
-        console.log("Full API Response:", fetchedMatches);
-
-        setMatches(fetchedMatches); 
-
-      
-        console.log("Match Types:", fetchedMatches.map((match: any) => match.matchType));
-
-        
-        const initialVotes = fetchedMatches.reduce((acc: any, match: Match) => {
+  
+        const matches = response.data.data || [];
+        const initialVotes = matches.reduce<VoteState>((acc, match) => {
           acc[match.id] = { yes: 0, no: 0 };
           return acc;
         }, {});
+        
+        setMatches(matches);
         setVotes(initialVotes);
       } catch (error) {
         console.error("Error fetching data: ", error);
+        setMatches([]);
+        setVotes({});
       }
     };
-
+  
     fetchMatches();
   }, [url]);
 
@@ -82,19 +84,8 @@ export default function HomePage() {
       no: Math.round((no / totalVotes) * 100),
     };
   };
-  
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
 
-  
-  const internationalMatches = matches.filter((match) => match.matchType === "t20","odi");
+  const internationalMatches = matches.filter((match) => match.matchType === "odi" , "t20");
   const premierLeagueMatches = matches.filter((match) => match.matchType === "ipl");
 
   const handleButtonClick = () => {
@@ -185,51 +176,41 @@ export default function HomePage() {
         {/* Tab Content */}
         <section className="flex justify-center">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl w-full px-4 sm:px-6 lg:px-8">
-            {(activeTab === "international" ? internationalMatches : premierLeagueMatches).length === 0 ? (
-              <div className="text-center text-gray-400">
-                No matches available for this category.
-              </div>
-            ) : (
-              (activeTab === "international" ? internationalMatches : premierLeagueMatches).map((match) => (
-                <div
-                  key={match.id}
-                  className="max-w-sm mx-auto bg-gradient-to-tr from-black via-purple-700 to-purple-400 p-[2px] rounded-lg shadow-lg"
-                  >
-                  <div className="bg-gray-950 text-white rounded-lg p-4">
-                    <h2 className="text-xl sm:text-2xl font-bold text-center text-gradient">{match.name}</h2>
+            {(activeTab === "international" ? internationalMatches : premierLeagueMatches).map((match) => (
+              <div
+                key={match.id}
+                className="relative bg-gradient-to-tr from-black via-purple-800 to-indigo-700 rounded-lg p-[1px] hover:scale-105 transition-transform duration-300 border-2 border-transparent hover:border-purple-600"
+              >
+                <div className="bg-gray-900 text-white rounded-lg p-4">
+                  <h2 className="text-xl sm:text-2xl font-bold text-center text-gradient">{match.name}</h2>
 
-                    <div className="mt-2 text-center text-gray-300">
-                    <p>{formatDate(match.dateTimeGMT)}</p>
+                  <div className="flex justify-between items-center mt-4">
+                    <button
+                      onClick={() => handleVote(match.id, "yes")}
+                      className={`w-[130px] sm:w-[150px] text-center py-2 rounded-full text-white font-bold ${
+                        votes[match.id]?.yes > 0 ? "bg-green-400" : "bg-gray-600"
+                      }`}
+                    >
+                      Yes ({calculatePercentage(match.id).yes}%)
+                    </button>
+                    <button
+                      onClick={() => handleVote(match.id, "no")}
+                      className={`w-[130px] sm:w-[150px] text-center py-2 rounded-full text-white font-bold ${
+                        votes[match.id]?.no > 0 ? "bg-red-400" : "bg-gray-600"
+                      }`}
+                    >
+                      No ({calculatePercentage(match.id).no}%)
+                    </button>
                   </div>
 
-                    <div className="flex justify-between items-center mt-4">
-                      <button
-                        onClick={() => handleVote(match.id, "yes")}
-                        className={`w-[130px] sm:w-[150px] text-center py-2 rounded-full text-white font-bold ${
-                          votes[match.id]?.yes > 0 ? "bg-green-400" : "bg-gray-600"
-                        }`}
-                      >
-                        Yes ({calculatePercentage(match.id).yes}%)
-                      </button>
-                      <button
-                        onClick={() => handleVote(match.id, "no")}
-                        className={`w-[130px] sm:w-[150px] text-center py-2 rounded-full text-white font-bold ${
-                          votes[match.id]?.no > 0 ? "bg-red-400" : "bg-gray-600"
-                        }`}
-                      >
-                        No ({calculatePercentage(match.id).no}%)
-                      </button>
-                    </div>
-
-                    <div className="mt-6 text-center">
-                      <button className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white px-5 py-2.5 rounded-full hover:from-purple-700 hover:to-indigo-800 transition duration-300">
-                        Place Your Bet on StarkNet
-                      </button>
-                    </div>
+                  <div className="mt-6 text-center">
+                    <button className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white px-5 py-2.5 rounded-full hover:from-purple-700 hover:to-indigo-800 transition duration-300">
+                      Place Your Bet on StarkNet
+                    </button>
                   </div>
                 </div>
-              ))
-            )}
+              </div>
+            ))}
           </div>
         </section>
       </main>

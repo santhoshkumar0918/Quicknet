@@ -43,12 +43,11 @@ function Page() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <p><strong>Username:</strong> {user.username || "N/A"}</p>
-                    <p><strong>Email:</strong> {user.email || "N/A"}</p>
-                    <p><strong>Alias:</strong> {user.alias || "N/A"}</p>
+                  \
                   </div>
                   <div>
                     
-                    <p><strong>Phone Number:</strong> {user.phoneNumber || "N/A"}</p>
+                    <p><strong>Wallet address :</strong>{user.}</p>
                     <p><strong>User ID:</strong> {user.userId || "N/A"}</p>
                     <p><strong>Scope:</strong> {user.scope || "N/A"}</p>
                   </div>
