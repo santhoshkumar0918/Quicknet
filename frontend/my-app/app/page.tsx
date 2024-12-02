@@ -82,6 +82,16 @@ export default function HomePage() {
       no: Math.round((no / totalVotes) * 100),
     };
   };
+  
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
 
   
   const internationalMatches = matches.filter((match) => match.matchType === "t20","odi");
@@ -187,6 +197,10 @@ export default function HomePage() {
                   >
                   <div className="bg-gray-950 text-white rounded-lg p-4">
                     <h2 className="text-xl sm:text-2xl font-bold text-center text-gradient">{match.name}</h2>
+
+                    <div className="mt-2 text-center text-gray-300">
+                    <p>{formatDate(match.dateTimeGMT)}</p>
+                  </div>
 
                     <div className="flex justify-between items-center mt-4">
                       <button
