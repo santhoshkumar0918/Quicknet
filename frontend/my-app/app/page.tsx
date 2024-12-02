@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 
 interface Match {
   id: string;
-    name: string;
+  name: string;
   matchType: string;
   status: string;
   venue: string;

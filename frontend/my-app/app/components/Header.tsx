@@ -266,7 +266,7 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation Centered */}
-          <nav className="hidden md:flex space-x-8 ml-32">
+          <nav className="hidden md:flex space-x-8 ml-28">
             <div
               onMouseEnter={() => handleMouseEnter('home')}
               onMouseLeave={handleMouseLeave}
