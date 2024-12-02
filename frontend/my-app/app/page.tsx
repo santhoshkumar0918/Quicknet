@@ -44,19 +44,29 @@ export default function HomePage() {
             "Content-Type": "application/json",
           },
         });
-        setMatches(response.data.data);
+  
+        console.log("Fetched matches:", response.data.data); 
+  
+        setMatches(response.data.data); 
+  
+        console.log("Match types:", response.data.data.map((match : any) => match.matchType));
+  
         const initialVotes = response.data.data.reduce((acc: any, match: Match) => {
           acc[match.id] = { yes: 0, no: 0 };
           return acc;
         }, {});
+  
         setVotes(initialVotes);
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
     };
-
+  
     fetchMatches();
   }, [url]);
+  
+
+  
 
   const handleVote = (matchId: string, voteType: "yes" | "no") => {
     setVotes((prevVotes) => {
@@ -76,8 +86,10 @@ export default function HomePage() {
     };
   };
 
-  const internationalMatches = matches.filter((match) => match.matchType === "odi");
+  const internationalMatches = matches.filter((match) => match.matchType === "t20");
+  
   const premierLeagueMatches = matches.filter((match) => match.matchType === "ipl");
+  console.log({ internationalMatches, premierLeagueMatches }); 
 
   const handleButtonClick = () => {
     setIsLoading(true);
