@@ -289,7 +289,7 @@ export default function Header() {
                 href="/my-bets"
                 className="text-gray-300 hover:text-white transition duration-300 text-lg relative"
               >
-                My Bets
+                Portfolio
               </Link>
             </div>
           </nav>

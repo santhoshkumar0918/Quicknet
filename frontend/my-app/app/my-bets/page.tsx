@@ -84,12 +84,12 @@ function Page() {
                 </div>
               </div>
 
-              {/* Finished Bets Section */}
+              {/* Finished Bets  */}
               <div>
                 <h2 className="text-xl font-bold text-purple-400 mb-3 text-center">Finished Bets</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   
-                  {/* Profitable Bets Table */}
+                  {/* Profitable Bets */}
                   <div className="bg-gradient-to-br from-black via-gray-300 to-purple-100 p-[1px] rounded-lg">
                     <div className="bg-gray-950 rounded-lg p-4">
                       <h3 className="text-lg font-bold text-green-400 mb-2 text-center">Profitable Bets</h3>
