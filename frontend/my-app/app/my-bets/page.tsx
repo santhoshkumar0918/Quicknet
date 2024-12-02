@@ -35,30 +35,30 @@ function Page() {
       </div>
 
       {/* User Profile Section */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <div className="max-w-4xl mx-auto bg-gradient-to-br from-black via-purple-700 to-purple-400 p-[1px] rounded-lg shadow-lg">
-          <div className="bg-gray-950 rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-purple-400 mb-4 text-center">User Profile</h2>
-            {user ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <p><strong>Username:</strong> {user.username || "N/A"}</p>
-                  <p><strong>Email:</strong> {user.email || "N/A"}</p>
-                  <p><strong>Alias:</strong> {user.alias || "N/A"}</p>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+          <div className="max-w-4xl mx-auto bg-gradient-to-br from-black via-purple-700 to-purple-400 p-[1px] rounded-lg shadow-lg">
+            <div className="bg-gray-950 rounded-lg p-6">
+              <h2 className="text-2xl font-bold text-purple-400 mb-4 text-center">User Profile</h2>
+              {user ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <p><strong>Username:</strong> {user.username || "N/A"}</p>
+                    <p><strong>Email:</strong> {user.email || "N/A"}</p>
+                    <p><strong>Alias:</strong> {user.alias || "N/A"}</p>
+                  </div>
+                  <div>
+                    
+                    <p><strong>Phone Number:</strong> {user.phoneNumber || "N/A"}</p>
+                    <p><strong>User ID:</strong> {user.userId || "N/A"}</p>
+                    <p><strong>Scope:</strong> {user.scope || "N/A"}</p>
+                  </div>
                 </div>
-                <div>
-                  
-                  <p><strong>Phone Number:</strong> {user.phoneNumber || "N/A"}</p>
-                  <p><strong>User ID:</strong> {user.userId || "N/A"}</p>
-                  <p><strong>Scope:</strong> {user.scope || "N/A"}</p>
-                </div>
-              </div>
-            ) : (
-              <p className="text-gray-500 text-center">Loading user details...</p>
-            )}
+              ) : (
+                <p className="text-gray-500 text-center">Loading user details...</p>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto bg-gradient-to-br from-black via-purple-700 to-purple-400 p-[1px] rounded-lg shadow-lg">
