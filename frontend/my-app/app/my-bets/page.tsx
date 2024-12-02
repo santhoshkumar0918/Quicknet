@@ -30,8 +30,8 @@ function Page() {
 
       {/* Main Heading and Description */}
       <div className="text-center py-8 mt-16">
-        <h1 className="text-4xl font-extrabold text-purple-400">My Bets</h1>
-        <p className="text-gray-300 mt-2">Track and manage your bets effortlessly.</p>
+        
+        <h1 className="text-gray-300 text-2xl  mt-2">Track and manage your bets effortlessly.</h1>
       </div>
 
       {/* User Profile Section */}
@@ -43,13 +43,11 @@ function Page() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <p><strong>Username:</strong> {user.username || "N/A"}</p>
-                  \
+                    <p><strong>Wallet address :</strong></p>  
                   </div>
                   <div>
-                    
-                    <p><strong>Wallet address :</strong>{user.}</p>
+                    <p><strong>Todays Pnl: +</strong></p>
                     <p><strong>User ID:</strong> {user.userId || "N/A"}</p>
-                    <p><strong>Scope:</strong> {user.scope || "N/A"}</p>
                   </div>
                 </div>
               ) : (
