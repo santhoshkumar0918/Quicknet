@@ -86,9 +86,9 @@ export default function HomePage() {
     };
   };
 
-  const internationalMatches = matches.filter((match) => match.matchType === "t20");
+  const internationalMatches = matches.filter((match) => match.matchType === "t20" , "odi");
   
-  const premierLeagueMatches = matches.filter((match) => match.matchType === "ipl");
+  const premierLeagueMatches = matches.filter((match) => match.matchType === "ipl");adde
   console.log({ internationalMatches, premierLeagueMatches }); 
 
   const handleButtonClick = () => {
@@ -182,9 +182,9 @@ export default function HomePage() {
             {(activeTab === "international" ? internationalMatches : premierLeagueMatches).map((match) => (
               <div
                 key={match.id}
-                className="relative bg-gradient-to-tr from-black via-purple-800 to-indigo-700 rounded-lg p-[1px] hover:scale-105 transition-transform duration-300 border-2 border-transparent hover:border-purple-600"
+                className="relative bg-gradient-to-tr from-black via-purple-700 to-purple-400 rounded-lg p-[1px] hover:scale-105 transition-transform duration-300 border-2 border-transparent hover:border-purple-600"
               >
-                <div className="bg-gray-900 text-white rounded-lg p-4">
+                <div className="bg-gray-950 text-white rounded-lg p-4">
                   <h2 className="text-xl sm:text-2xl font-bold text-center text-gradient">{match.name}</h2>
 
                   <div className="flex justify-between items-center mt-4">
