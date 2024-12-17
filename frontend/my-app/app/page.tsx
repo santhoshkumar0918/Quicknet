@@ -298,6 +298,14 @@ export default function HomePage() {
     (match) => match.matchType === "ipl"
   );
 
+  const handleButtonClick = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      // Redirect or do some action here after the loading
+    }, 2000); // Simulate loading for 2 seconds
+  };
+
   return (
     <>
       <Header />
@@ -322,6 +330,7 @@ export default function HomePage() {
               <div className="flex space-x-4">
                 <Link href="/create-your-own-bet">
                   <motion.button
+                    onClick={handleButtonClick}
                     className={`relative px-6 py-3 rounded-full border-2 border-white text-white font-semibold transition duration-300 ${
                       isLoading ? "pointer-events-none" : ""
                     }`}
@@ -438,7 +447,7 @@ export default function HomePage() {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
-                        Place Your Bet
+                        Place Bet
                       </motion.button>
                     </Link>
                   </div>
