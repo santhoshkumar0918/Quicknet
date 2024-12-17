@@ -11,7 +11,7 @@ trait IFieldFactory<TContractState> {
     fn resolve_market(ref self: TContractState, market_id: u32, winning_outcome: u32);
     fn claim_reward(ref self: TContractState, market_id: u32);
     
-    // New getter functions
+    
     fn get_total_liquidity(self: @TContractState) -> u256;
     fn get_liquidity_provider_stake(self: @TContractState, provider: ContractAddress) -> u256;
     fn get_bet(self: @TContractState, market_id: u32, user: ContractAddress) -> (u256, u256, u32);
@@ -36,7 +36,7 @@ pub mod FieldFactory {
     #[constructor]
     fn constructor(ref self: ContractState) {
         self.next_market_id.write(0);
-        self.total_liquidity_pool.write(0); // Initialize the liquidity pool to 0
+        self.total_liquidity_pool.write(0); 
     }
 
     #[event]
