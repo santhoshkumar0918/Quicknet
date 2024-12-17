@@ -219,12 +219,11 @@
 //   );
 // }
 "use client"
-
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Header from "./components/Header";
 import { motion } from "framer-motion";
+import Header from "./components/Header";
 
 interface Match {
   id: string;
@@ -306,7 +305,81 @@ export default function HomePage() {
         {/* Display error if any */}
         {error && <div className="text-red-500">{error}</div>}
 
-        {/* Matches display */}
+        {/* Hero Section with Background Image */}
+        <div className="flex flex-col items-center justify-center mb-8">
+          <div className="relative w-full h-[30vh] sm:h-[40vh] lg:h-[50vh]">
+            <Image
+              src="/images/cricket.webp"
+              alt="Cricket Betting Market"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-lg h-[12vh] w-full shadow-lg"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center px-4 sm:px-6">
+              <h1 className="text-4xl sm:text-3xl font-bold text-white mb-4 text-center">
+                Welcome to Cricket Betting Market
+              </h1>
+              <div className="flex space-x-4">
+                <Link href="/create-your-own-bet">
+                  <motion.button
+                    className={`relative px-6 py-3 rounded-full border-2 border-white text-white font-semibold transition duration-300 ${
+                      isLoading ? "pointer-events-none" : ""
+                    }`}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <motion.div
+                        className="absolute inset-0 border-2 border-white rounded-full animate-spin"
+                        initial={{ borderColor: "rgba(255, 255, 255, 0.5)" }}
+                        animate={{ borderColor: "rgba(255, 255, 255, 1)" }}
+                        transition={{
+                          duration: 1,
+                          repeat: Infinity,
+                          ease: "linear",
+                        }}
+                      />
+                    ) : (
+                      "Create Your Own Bet"
+                    )}
+                    <span className="relative z-10">
+                      {isLoading ? "Loading..." : ""}
+                    </span>
+                  </motion.button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabs Section */}
+        <div className="flex justify-center mb-6">
+          <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 rounded-full p-2 flex space-x-4 border-2 border-white">
+            <button
+              onClick={() => setActiveTab("international")}
+              className={`px-6 py-2 rounded-full transition-transform transform hover:scale-105 border-2 ${
+                activeTab === "international"
+                  ? "bg-gradient-to-r from-purple-700 to-indigo-600 text-white border-white shadow-lg"
+                  : "text-gray-300 hover:text-white border-transparent hover:border-purple-600"
+              }`}
+            >
+              International Matchups
+            </button>
+            <button
+              onClick={() => setActiveTab("premierLeague")}
+              className={`px-6 py-2 rounded-full transition-transform transform hover:scale-105 border-2 ${
+                activeTab === "premierLeague"
+                  ? "bg-gradient-to-r from-purple-700 to-indigo-600 text-white border-white shadow-lg"
+                  : "text-gray-300 hover:text-white border-transparent hover:border-purple-600"
+              }`}
+            >
+              Premier League
+            </button>
+          </div>
+        </div>
+
+        {/* Tab Content */}
         <section className="flex justify-center">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl w-full px-4 sm:px-6 lg:px-8">
             {(activeTab === "international"
