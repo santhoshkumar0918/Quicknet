@@ -1,4 +1,3 @@
-
 // "use client";
 
 // import { useState, useEffect } from "react";
@@ -104,11 +103,11 @@
 
 //       if (account) {
 //         const transaction = [
-         
+
 //           {
-//             to: "0x073D30705921fC6A92a52b80A093B3eCF9cA6E398a4d1027D60C90111E3FCe0f", 
-//             data: ``, 
-//             value: betAmount, 
+//             to: "0x073D30705921fC6A92a52b80A093B3eCF9cA6E398a4d1027D60C90111E3FCe0f",
+//             data: ``,
+//             value: betAmount,
 //           }
 //         ];
 
@@ -180,6 +179,7 @@
 //     </>
 //   );
 // }
+"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Header from "../components/Header";
@@ -202,10 +202,12 @@ export default function PlaceYourBet() {
 
     try {
       const normalizedWallet = primaryWallet as Wallet;
-      const account = (await normalizedWallet?.connector?.getSigner()) as AccountInterface;
+      const account =
+        (await normalizedWallet?.connector?.getSigner()) as AccountInterface;
 
       if (account) {
-        const contractAddress = "0x073D30705921fC6A92a52b80A093B3eCF9cA6E398a4d1027D60C90111E3FCe0f";
+        const contractAddress =
+          "0x073D30705921fC6A92a52b80A093B3eCF9cA6E398a4d1027D60C90111E3FCe0f";
         const entrypoint = "place_bet";
 
         // Convert the betAmount to a string or number that StarkNet expects
