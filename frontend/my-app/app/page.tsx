@@ -218,8 +218,7 @@
 //     </>
 //   );
 // }
-
-"use client";
+"use client"
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -241,53 +240,27 @@ interface Match {
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState("international");
+  const [matches, setMatches] = useState<Match[]>([]);
   const [votes, setVotes] = useState<
     Record<string, { yes: number; no: number }>
   >({});
   const [isLoading, setIsLoading] = useState(false);
-  const [matches, setMatches] = useState<Match[]>([]); // State for fetched matches
-  const [error, setError] = useState<string | null>(null); // Error state
-
-  const mockMatches: Match[] = [
-    {
-      id: "1",
-      name: "India vs Australia",
-      matchType: "odi",
-      status: "Upcoming",
-      venue: "Delhi",
-      date: "2024-12-15",
-      dateTimeGMT: "15:30 GMT",
-      score: "N/A",
-      teams: [],
-    },
-    {
-      id: "2",
-      name: "England vs Pakistan",
-      matchType: "t20",
-      status: "Live",
-      venue: "London",
-      date: "2024-12-16",
-      dateTimeGMT: "18:00 GMT",
-      score: "140/3",
-      teams: [],
-    },
-    // Add more mock data as needed...
-  ];
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || ""; // Add your base URL in .env file for deployment
-        console.log("Fetching matches from:", `${apiUrl}/api/cricket`);
+        const apiUrl = "/api/cricket"; // Calling your internal API route
+        console.log("Fetching matches from:", apiUrl);
 
-        const response = await fetch(`${apiUrl}/api/cricket`);
+        const response = await fetch(apiUrl);
         if (!response.ok) {
           throw new Error(`HTTP Error: ${response.status}`);
         }
 
         const data = await response.json();
         console.log("Fetched match data:", data);
-        setMatches(data);
+        setMatches(data.matches); // Assuming the response contains a `matches` field
       } catch (error: any) {
         console.error("Error fetching matches:", {
           message: error.message,
@@ -300,29 +273,13 @@ export default function HomePage() {
     fetchMatches();
   }, []);
 
-  useEffect(() => {
-    const initialVotes = mockMatches.reduce<
-      Record<string, { yes: number; no: number }>
-    >((acc, match) => {
-      acc[match.id] = { yes: 0, no: 0 };
-      return acc;
-    }, {});
-    setVotes(initialVotes);
-  }, []);
-
   const handleVote = (matchId: string, voteType: "yes" | "no") => {
     setVotes((prevVotes) => {
       const updatedVotes = { ...prevVotes };
+      updatedVotes[matchId] = updatedVotes[matchId] || { yes: 0, no: 0 };
       updatedVotes[matchId][voteType]++;
       return updatedVotes;
     });
-  };
-
-  const handleButtonClick = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
   };
 
   const calculatePercentage = (matchId: string) => {
@@ -346,84 +303,10 @@ export default function HomePage() {
     <>
       <Header />
       <main className="mt-[10vh] p-4 bg-gray-950 sm:p-6 lg:p-8">
-        <div className="flex flex-col items-center justify-center mb-8">
-          <div className="relative  w-full h-[30vh] sm:h-[40vh] lg:h-[50vh]">
-            <Image
-              src="/images/cricket.webp"
-              alt="Cricket Betting Market"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-lg h-[12vh] w-full shadow-lg"
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center px-4 sm:px-6">
-              <h1 className="text-4xl sm:text-3xl font-bold text-white mb-4 text-center">
-                Welcome to Cricket Betting Market
-              </h1>
-              <div className="flex space-x-4">
-                <Link href="/create-your-own-bet">
-                  <motion.button
-                    onClick={handleButtonClick}
-                    className={`relative px-6 py-3 rounded-full border-2 border-white text-white font-semibold transition duration-300 ${
-                      isLoading ? "pointer-events-none" : ""
-                    }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? (
-                      <motion.div
-                        className="absolute inset-0 border-2 border-white rounded-full animate-spin"
-                        initial={{ borderColor: "rgba(255, 255, 255, 0.5)" }}
-                        animate={{ borderColor: "rgba(255, 255, 255, 1)" }}
-                        transition={{
-                          duration: 1,
-                          repeat: Infinity,
-                          ease: "linear",
-                        }}
-                      />
-                    ) : (
-                      "Create Your Own Bet"
-                    )}
-                    <span className="relative z-10">
-                      {isLoading ? "Loading..." : ""}
-                    </span>
-                  </motion.button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Display error if any */}
+        {error && <div className="text-red-500">{error}</div>}
 
-        {/* Error Handling */}
-        {error && <div className="text-red-500 text-center">{error}</div>}
-
-        {/* Tabs Section */}
-        <div className="flex justify-center mb-6">
-          <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 rounded-full p-2 flex space-x-4 border-2 border-white">
-            <button
-              onClick={() => setActiveTab("international")}
-              className={`px-6 py-2 rounded-full transition-transform transform hover:scale-105 border-2 ${
-                activeTab === "international"
-                  ? "bg-gradient-to-r from-purple-700 to-indigo-600 text-white border-white shadow-lg"
-                  : "text-gray-300 hover:text-white border-transparent hover:border-purple-600"
-              }`}
-            >
-              International Matchups
-            </button>
-            <button
-              onClick={() => setActiveTab("premierLeague")}
-              className={`px-6 py-2 rounded-full transition-transform transform hover:scale-105 border-2 ${
-                activeTab === "premierLeague"
-                  ? "bg-gradient-to-r from-purple-700 to-indigo-600 text-white border-white shadow-lg"
-                  : "text-gray-300 hover:text-white border-transparent hover:border-purple-600"
-              }`}
-            >
-              Premier League
-            </button>
-          </div>
-        </div>
-
-        {/* Tab Content */}
+        {/* Matches display */}
         <section className="flex justify-center">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl w-full px-4 sm:px-6 lg:px-8">
             {(activeTab === "international"
