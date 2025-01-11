@@ -1,5 +1,0 @@
-
-[sncast.avii]
-account = "account2"
-accounts-file = "/home/aviralsingh/.starknet_accounts/starknet_open_zeppelin_accounts.json"
-url = "https://starknet-sepolia.public.blastapi.io/rpc/v0_7"

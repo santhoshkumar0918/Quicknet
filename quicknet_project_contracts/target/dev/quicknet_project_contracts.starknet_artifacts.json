@@ -1,1 +1,0 @@
-{"version":1,"contracts":[{"id":"rederh4vj0kvm","package_name":"quicknet_project_contracts","contract_name":"FieldFactory","module_path":"quicknet_project_contracts::field_factory::FieldFactory","artifacts":{"sierra":"quicknet_project_contracts_FieldFactory.contract_class.json","casm":"quicknet_project_contracts_FieldFactory.compiled_contract_class.json"}}]}

@@ -1,5 +1,0 @@
-sncast --account myuser \
-    declare \
-    --url https://starknet-sepolia.public.blastapi.io/rpc/v0_7 \ 
-                           
-    --contract-name FieldFactory
