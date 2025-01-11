@@ -103,10 +103,18 @@ function Page() {
 
   const [timeFilter, setTimeFilter] = useState<'24h' | '7d' | '30d' | 'all'>('7d');
 
+  const [bets, setBets] = useState([]);
+
+  useEffect(() => {
+    // Load bets from localStorage
+    const userBets = JSON.parse(localStorage.getItem('userBets') || '[]');
+    setBets(userBets);
+  }, []);
+
   // User Profile Section
   const UserProfileSection = () => (
     <motion.div 
-      className="user-profile bg-gray-900/30 p-8 rounded-2xl"
+      className="user-profile bg-gray-900/30 p-8 mt-8 rounded-2xl"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -321,91 +329,35 @@ function Page() {
 
   const ActiveBetsAndPredictionsSection = () => (
     <motion.div 
-      className="bg-gray-900/30 p-6 rounded-2xl border border-blue-500/20 backdrop-blur-lg"
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ scale: 1.02 }}
+      className="bg-gray-900/30 p-6 mt-8 rounded-2xl border border-blue-500/20 backdrop-blur-lg"
     >
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold flex items-center gap-2">
           <FaRobot className="text-blue-400" />
           Active Bets & AI Predictions
         </h2>
-        <motion.button
-          className="px-4 py-2 bg-purple-600 rounded-lg text-sm font-semibold flex items-center gap-2"
-          whileHover={{ scale: 1.05, backgroundColor: "#7c3aed" }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <FaChartLine />
-          New Bet
-        </motion.button>
       </div>
 
       <div className="space-y-4">
-        {/* Active Bets */}
         <div className="bg-gray-800/50 p-4 rounded-xl border border-purple-500/20">
           <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
             <FaHistory className="text-purple-400" />
             Active Bets
           </h3>
           <div className="space-y-3">
-            {[
-              { match: "IND vs AUS", prediction: "IND to win", amount: "0.5 ETH", confidence: 85 },
-              { match: "ENG vs NZ", prediction: "NZ to win", amount: "0.3 ETH", confidence: 75 }
-            ].map((bet, index) => (
+            {bets.map((bet) => (
               <motion.div
-                key={index}
+                key={bet.id}
                 className="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg border border-gray-700/30"
                 whileHover={{ x: 5, backgroundColor: "rgba(17, 24, 39, 0.7)" }}
               >
                 <div>
-                  <h4 className="font-medium text-purple-400">{bet.match}</h4>
-                  <p className="text-sm text-gray-400">{bet.prediction}</p>
+                  <h4 className="font-medium text-purple-400">{bet.team}</h4>
+                  <p className="text-sm text-gray-400">Placed: {new Date(bet.timestamp).toLocaleString()}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-semibold text-green-400">{bet.amount}</p>
-                  <div className="flex items-center gap-1 text-sm">
-                    <div className="w-20 h-1 bg-gray-700 rounded-full overflow-hidden">
-                      <motion.div
-                        className="h-full bg-blue-500"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${bet.confidence}%` }}
-                        transition={{ duration: 1, delay: index * 0.2 }}
-                      />
-                    </div>
-                    <span className="text-blue-400">{bet.confidence}%</span>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* AI Predictions */}
-        <div className="bg-gray-800/50 p-4 rounded-xl border border-blue-500/20">
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <FaRobot className="text-blue-400" />
-            AI Match Predictions
-          </h3>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { teams: "PAK vs SA", prediction: "PAK", odds: "1.8x", time: "2h" },
-              { teams: "WI vs SL", prediction: "WI", odds: "2.1x", time: "5h" },
-              { teams: "BAN vs AFG", prediction: "BAN", odds: "1.5x", time: "8h" },
-              { teams: "ZIM vs IRE", prediction: "IRE", odds: "1.9x", time: "12h" }
-            ].map((match, index) => (
-              <motion.div
-                key={index}
-                className="p-3 bg-gray-900/50 rounded-lg border border-gray-700/30"
-                whileHover={{ y: -2, backgroundColor: "rgba(17, 24, 39, 0.7)" }}
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <span className="text-sm font-medium">{match.teams}</span>
-                  <span className="text-xs text-gray-400">in {match.time}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-green-400 font-semibold">{match.prediction}</span>
-                  <span className="text-blue-400 text-sm">{match.odds}</span>
+                  <p className="font-semibold text-green-400">{bet.amount} ETH</p>
+                  <p className="text-sm text-blue-400">Potential: {bet.potentialReturn} ETH</p>
                 </div>
               </motion.div>
             ))}

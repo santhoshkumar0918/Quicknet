@@ -150,30 +150,34 @@ const MatchCard = ({ match }: { match: Match }) => {
             )}
           </div>
 
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center gap-4">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={handlePlaceBet}
-              className="relative group/btn overflow-hidden bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-3 rounded-lg text-sm font-semibold"
+              onClick={() => router.push(`/quick-bet?match=${match.name}&team1=${match.captains.team1.name}&team2=${match.captains.team2.name}`)}
+              className="relative group/btn flex-1 overflow-hidden bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-3 rounded-lg text-sm font-semibold"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-cyan-500 to-purple-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
-              <span className="relative z-10 flex items-center gap-2">
-                <FaEthereum className="text-purple-300" />
-                Place Bet
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                <FaBolt className="text-purple-300" />
+                Quick Bet
                 <FaArrowRight className="group-hover/btn:translate-x-1 transition-transform" />
               </span>
             </motion.button>
-            <motion.div 
+
+            <motion.button
               whileHover={{ scale: 1.05 }}
-              className="relative"
+              whileTap={{ scale: 0.95 }}
+              onClick={() => router.push(`/create-your-own-bet?match=${match.name}&team1=${match.captains.team1.name}&team2=${match.captains.team2.name}`)}
+              className="relative group/btn flex-1 overflow-hidden bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 rounded-lg text-sm font-semibold"
             >
-              <div className="absolute inset-0 bg-blue-500/20 rounded-lg blur-md" />
-              <div className="flex items-center gap-2 bg-blue-500/10 px-4 py-2 rounded-lg border border-blue-500/30 relative z-10">
-                <FaChartLine className="text-blue-400" />
-                <span className="text-sm font-medium">AI Confidence: 75%</span>
-              </div>
-            </motion.div>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-500 to-blue-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                <FaChartLine className="text-blue-300" />
+                Custom Bet
+                <FaArrowRight className="group-hover/btn:translate-x-1 transition-transform" />
+              </span>
+            </motion.button>
           </div>
 
           <motion.button
@@ -373,7 +377,7 @@ export default function HomePage() {
               Challenge our AI in predicting cricket match outcomes
             </motion.p>
             <motion.button 
-              onClick={() => router.push('/')}
+              onClick={() => router.push('/create-your-own-bet')}
               className="bg-gradient-to-r from-purple-600 to-purple-700 px-8 py-4 rounded-xl text-lg font-semibold hover:from-purple-700 hover:to-purple-800 transition-all shadow-xl hover:shadow-purple-500/30 flex items-center gap-2 mx-auto"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
