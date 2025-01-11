@@ -83,31 +83,56 @@ export default function HomePage() {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative h-[80vh] flex items-center justify-center">
-        <div className="absolute inset-0">
+      <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
+        <motion.div 
+          className="absolute inset-0 z-0"
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.5 }}
+        >
           <Image
-            src="/images/cricket-stadium.jpg"
+            src="/images/cricket.webp"
             alt="Cricket Stadium"
             layout="fill"
             objectFit="cover"
-            className="opacity-50"
-            loader={optimizedImageLoader}
+            className="opacity-60 hover:scale-105 transition-transform duration-[3000ms]"
+            priority
           />
-        </div>
-        <div className="relative z-10 text-center">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6">
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent" />
+        </motion.div>
+
+        <motion.div 
+          className="relative z-10 text-center max-w-4xl mx-auto px-4"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <motion.h1 
+            className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent"
+            whileHover={{ scale: 1.02 }}
+          >
             Bet Against AI
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 text-gray-300">
+          </motion.h1>
+          <motion.p 
+            className="text-xl md:text-2xl mb-8 text-purple-100"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+          >
             Challenge our AI in predicting cricket match outcomes
-          </p>
-          <button 
+          </motion.p>
+          <motion.button 
             onClick={handleButtonClick}
-            className="bg-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-purple-700 transition-all"
+            className="bg-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-purple-700 transition-all shadow-lg hover:shadow-purple-500/20"
+            whileHover={{ scale: 1.05, backgroundColor: "#7c3aed" }}
+            whileTap={{ scale: 0.95 }}
           >
             Start Betting
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
+
+        {/* Decorative Elements */}
+        <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-gray-900 to-transparent" />
       </section>
 
       {/* Live Matches Section */}
