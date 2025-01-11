@@ -106,7 +106,7 @@ function Page() {
   // User Profile Section
   const UserProfileSection = () => (
     <motion.div 
-      className="user-profile bg-gray-900/30 p-8 rounded-2xl border border-purple-500/20 backdrop-blur-lg shadow-xl hover:shadow-purple-500/10 transition-all duration-300"
+      className="user-profile bg-gray-900/30 p-8 rounded-2xl border mt-8 border-purple-500/20 backdrop-blur-lg shadow-xl hover:shadow-purple-500/10 transition-all duration-300"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       whileHover={{ scale: 1.02 }}
