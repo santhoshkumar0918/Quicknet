@@ -106,14 +106,16 @@ function Page() {
   // User Profile Section
   const UserProfileSection = () => (
     <motion.div 
-      className="user-profile bg-gray-900/30 p-8 rounded-2xl border mt-8 border-purple-500/20 backdrop-blur-lg shadow-xl hover:shadow-purple-500/10 transition-all duration-300"
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ scale: 1.02 }}
+      className="user-profile bg-gray-900/30 p-8 rounded-2xl"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
     >
       <motion.div 
         className="flex items-center gap-4 mb-6"
-        whileHover={{ x: 5 }}
+        initial={{ x: -20, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
       >
         <div className="relative">
           <motion.div 
@@ -150,7 +152,12 @@ function Page() {
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <motion.div 
+        className="grid grid-cols-3 gap-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+      >
         {[
           { label: "Total Bets", value: userData.totalBets, icon: FaHistory },
           { label: "Total Profit", value: `+${userData.totalProfit} ETH`, icon: FaEthereum, isProfit: true },
@@ -158,11 +165,18 @@ function Page() {
         ].map((stat, index) => (
           <motion.div
             key={stat.label}
-            className="stat-card bg-gray-800/50 p-4 rounded-xl border border-gray-700/50"
-            whileHover={{ scale: 1.05, y: -5 }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ 
+              delay: 0.6 + (index * 0.1),
+              duration: 0.4,
+              ease: "easeOut"
+            }}
+            whileHover={{ 
+              scale: 1.05,
+              transition: { duration: 0.2 }
+            }}
+            className="stat-card bg-gray-800/50 p-4 rounded-xl"
           >
             <stat.icon className={`text-xl mb-2 ${stat.isProfit ? 'text-green-400' : 'text-blue-400'}`} />
             <p className="text-sm text-gray-400">{stat.label}</p>
@@ -171,16 +185,17 @@ function Page() {
             </p>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
     </motion.div>
   );
 
   const LeaderboardSection = () => (
     <motion.div 
-      className="leaderboard bg-gray-900/30 p-6 rounded-2xl border border-blue-500/20 backdrop-blur-lg mb-8"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.01 }}
+      className="leaderboard bg-gray-900/30 p-6 rounded-2xl"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.7 }}
     >
       <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
         <FaTrophy className="text-yellow-400" />
@@ -194,8 +209,20 @@ function Page() {
         ].map((entry) => (
           <motion.div
             key={entry.rank}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ 
+              delay: entry.rank * 0.2,
+              duration: 0.5,
+              ease: "easeOut"
+            }}
+            whileHover={{ 
+              scale: 1.02,
+              x: 10,
+              transition: { duration: 0.2 }
+            }}
             className="flex items-center justify-between bg-gray-800/50 p-4 rounded-xl"
-            whileHover={{ x: 10, backgroundColor: "rgba(31, 41, 55, 0.7)" }}
           >
             <div className="flex items-center gap-4">
               <span className={`text-lg font-bold ${
@@ -217,10 +244,11 @@ function Page() {
 
   const BetInsightsSection = () => (
     <motion.div 
-      className="bet-insights bg-gray-900/30 p-6 rounded-2xl border border-green-500/20 backdrop-blur-lg mb-8"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.01 }}
+      className="bet-insights bg-gray-900/30 p-6 rounded-2xl"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
     >
       <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
         <FaLightbulb className="text-yellow-400" />
@@ -235,12 +263,17 @@ function Page() {
         ].map((insight) => (
           <motion.div
             key={insight.title}
-            className={`p-4 rounded-xl ${
-              insight.type === 'opportunity' ? 'bg-green-900/20 border-green-500/20' :
-              insight.type === 'warning' ? 'bg-red-900/20 border-red-500/20' :
-              'bg-blue-900/20 border-blue-500/20'
-            } border`}
-            whileHover={{ scale: 1.03, y: -2 }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ 
+              delay: insight.type === 'opportunity' ? 0.1 : 0.3,
+              duration: 0.4
+            }}
+            whileHover={{ 
+              scale: 1.03,
+              transition: { duration: 0.2 }
+            }}
+            className={`p-4 rounded-xl ${insight.type === 'opportunity' ? 'bg-green-900/20' : 'bg-red-900/20'}`}
           >
             <h3 className="font-semibold mb-2">{insight.title}</h3>
             <p className="text-sm text-gray-400">{insight.desc}</p>
