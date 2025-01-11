@@ -1,193 +1,123 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
-import { useState } from 'react'
-import { IoSendSharp } from 'react-icons/io5'
-import Header from '../components/Header'
+import React from 'react';
+import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import BettingInterface from '../components/BettingInterface';
+import { motion } from 'framer-motion';
+import { FaTrophy, FaChartLine, FaRobot } from 'react-icons/fa';
+import Header from '../components/Header';
+import type { ReactElement } from 'react';
 
-interface Message {
-  type: 'user' | 'ai';
-  content: string;
-}
-
-interface Player {
-  name: string;
-  role: string;
-}
-
-interface BetOption {
-  label: string;
-  value: string;
-}
-
-interface BetDetails {
-  [key: string]: string;
-}
-
-const TEAM_PLAYERS: Record<string, Player[]> = {
-  "your_team_name": [
-    { name: "Player 1", role: "Batsman" },
-    { name: "Player 2", role: "Bowler" }
-    // Add more players as needed
-  ]
-};
-
-const ChatMessage = ({ message }: { message: Message }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      className={`p-4 rounded-lg ${
-        message.type === 'user' ? 'bg-blue-500/20 ml-auto' : 'bg-gray-500/20'
-      }`}
-    >
-      {message.content}
-    </motion.div>
-  );
-};
-
-export default function CreateBetPage() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState('');
-  const [betOptions, setBetOptions] = useState<BetOption[]>([]);
-  const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
-  const [hasBetDetails, setHasBetDetails] = useState(false);
-  const [betDetails, setBetDetails] = useState<BetDetails>({});
-  const [isTyping, setIsTyping] = useState(false);
-
-  const handleSend = () => {
-    if (!input.trim()) {
-      alert("Please enter a message!");
-      return;
-    }
-    setMessages(prev => [...prev, { type: 'user', content: input }]);
-    setInput('');
-    const team = "your_team_name"; // Replace with the actual team name or logic to get the team
-    setMessages(prev => [
-      ...prev,
-      { type: 'user', content: `I'll predict the team for ${team}` },
-      { type: 'ai', content: `Great! Select 11 players you think will be in the ${team} playing XI:` }
-    ]);
-    
-    setBetOptions([]);
-    setSelectedPlayers([]);
-    
-    const teamPlayers = TEAM_PLAYERS[team] || [];
-    setBetOptions(
-      teamPlayers.map(player => ({
-        label: `${player.name} (${player.role})`,
-        value: player.name
-      }))
-    );
-  };
+export default function CreateBetPage(): ReactElement {
+  const [showBettingInterface, setShowBettingInterface] = useState(false);
+  const searchParams = useSearchParams();
+  
+  const matchId = searchParams.get('match') || '';
+  const team1 = searchParams.get('team1') || '';
+  const team2 = searchParams.get('team2') || '';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
+    <div className="min-h-screen bg-gray-900 text-white">
       <Header />
-      <main className="mt-[11vh]">
-        <motion.div 
-          className="max-w-4xl mx-auto backdrop-blur-lg bg-black/30 rounded-2xl shadow-2xl overflow-hidden"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          {/* Header */}
-          <div className="p-6 border-b border-white/10">
-            <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
-              AI Betting Assistant
-            </h1>
-            <p className="text-white/60 mt-2">Let's create your perfect bet together</p>
-          </div>
+      
+      <div className="container mx-auto px-4 py-24">
+        {/* Match Overview */}
+        <div className="bg-gray-800/50 rounded-xl p-8 mb-8">
+          <h1 className="text-3xl font-bold mb-4 flex items-center gap-3">
+            <FaTrophy className="text-yellow-400" />
+            {team1} vs {team2}
+          </h1>
+          <p className="text-gray-400">Match ID: {matchId}</p>
+        </div>
 
-          {/* Chat Area */}
-          <div className="h-[60vh] overflow-y-auto p-6 space-y-4">
-            <AnimatePresence>
-              {messages.map((message, index) => (
-                <ChatMessage key={index} message={message} />
-              ))}
-              {isTyping && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex gap-2 text-white/60"
-                >
-                  <span className="animate-bounce">●</span>
-                  <span className="animate-bounce delay-100">●</span>
-                  <span className="animate-bounce delay-200">●</span>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Input Area */}
-          <div className="p-6 border-t border-white/10">
-            <div className="flex gap-4">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg
-                          focus:ring-2 focus:ring-cyan-400 transition-all duration-300
-                          text-white placeholder-white/50"
-                placeholder="Type your message..."
-              />
-              <motion.button
-                onClick={handleSend}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 
-                         rounded-lg font-semibold text-white shadow-lg
-                         hover:shadow-cyan-500/50 transition-all duration-300"
-              >
-                <IoSendSharp className="w-5 h-5" />
-              </motion.button>
-            </div>
-          </div>
-
-          {/* Quick Options */}
-          <div className="p-4 border-t border-white/10">
-            <div className="flex flex-wrap gap-2 justify-center">
-              {betOptions.map((option, index) => (
-                <motion.button
-                  key={index}
-                  onClick={() => {
-                    // Handle option selection logic
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg
-                           text-white hover:bg-white/10 transition-all duration-300"
-                >
-                  {option.label}
-                </motion.button>
-              ))}
-            </div>
-          </div>
-
-          {/* Bet Summary */}
-          {hasBetDetails && (
-            <motion.div 
-              className="p-6 border-t border-white/10"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
-              <h2 className="text-xl font-semibold text-white mb-4">Bet Summary</h2>
-              <div className="grid grid-cols-2 gap-4 text-white/80">
-                {Object.entries(betDetails).map(([key, value]) => (
-                  value && (
-                    <div key={key} className="bg-white/5 p-3 rounded-lg">
-                      <span className="text-white/60">{key}: </span>
-                      <span>{value}</span>
-                    </div>
-                  )
+        {/* Main Betting Options */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          {/* Overall Match Winner */}
+          <motion.div
+            className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 rounded-xl p-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <FaChartLine className="text-purple-400" />
+              Match Winner Prediction
+            </h2>
+            <div className="space-y-4">
+              <p className="text-gray-300">
+                Place your bet on the overall match winner. This is a direct prediction
+                without AI assistance.
+              </p>
+              <div className="grid grid-cols-2 gap-4 mt-6">
+                {[team1, team2].map((team) => (
+                  <motion.button
+                    key={team}
+                    onClick={() => setShowBettingInterface(true)}
+                    className="bg-gray-800 hover:bg-gray-700 p-4 rounded-xl border border-purple-500/20"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <div className="text-lg font-bold mb-2">{team}</div>
+                    <div className="text-purple-400">2.5x</div>
+                  </motion.button>
                 ))}
               </div>
+            </div>
+          </motion.div>
+
+          {/* Advanced Betting */}
+          <motion.div
+            className="bg-gradient-to-br from-green-900/50 to-teal-900/50 rounded-xl p-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <FaRobot className="text-green-400" />
+              Advanced Betting Options
+            </h2>
+            <div className="space-y-4">
+              <p className="text-gray-300">
+                Access detailed betting options with AI assistance and analysis.
+              </p>
+              <motion.button
+                onClick={() => setShowBettingInterface(true)}
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 rounded-xl
+                  text-lg font-semibold shadow-xl mt-6"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Place Advanced Bet
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Live Stats or Additional Info */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {['Match Stats', 'Team Form', 'Head to Head'].map((stat) => (
+            <motion.div
+              key={stat}
+              className="bg-gray-800/30 p-6 rounded-xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <h3 className="font-semibold mb-2">{stat}</h3>
+              <p className="text-gray-400">Coming soon...</p>
             </motion.div>
-          )}
-        </motion.div>
-      </main>
+          ))}
+        </div>
+
+        {showBettingInterface && (
+          <BettingInterface
+            matchId={matchId}
+            team1={team1}
+            team2={team2}
+            onClose={() => setShowBettingInterface(false)}
+          />
+        )}
+      </div>
     </div>
   );
 }

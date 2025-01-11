@@ -302,7 +302,7 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
-              Why Bet With Us
+            Why Bet With Us
             </h2>
             <p className="text-xl text-gray-400 max-w-2xl mx-auto">
               Experience the future of sports betting with our AI-powered platform
