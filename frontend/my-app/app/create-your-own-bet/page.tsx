@@ -1,268 +1,193 @@
+'use client'
 
-// "use client";
+import { motion, AnimatePresence } from 'framer-motion'
+import { useState } from 'react'
+import { IoSendSharp } from 'react-icons/io5'
+import Header from '../components/Header'
 
-// import React, { useState } from "react";
-// import Header from "../components/Header";
+interface Message {
+  type: 'user' | 'ai';
+  content: string;
+}
 
-// function Page() {
-//   const [messages, setMessages] = useState<{ sender: "user" | "ai"; text: string }[]>([]);
-//   const [isLoading, setIsLoading] = useState(false);
+interface Player {
+  name: string;
+  role: string;
+}
 
-//   const prompts = ["Easy", "Ordinary", "Impossible"];
+interface BetOption {
+  label: string;
+  value: string;
+}
 
-//   const handleSend = (prompt: string) => {
-//     setMessages((prevMessages) => [...prevMessages, { sender: "user", text: prompt }]);
+interface BetDetails {
+  [key: string]: string;
+}
 
-//     setIsLoading(true);
+const TEAM_PLAYERS: Record<string, Player[]> = {
+  "your_team_name": [
+    { name: "Player 1", role: "Batsman" },
+    { name: "Player 2", role: "Bowler" }
+    // Add more players as needed
+  ]
+};
 
-//     setTimeout(() => {
-//       setMessages((prevMessages) => [
-//         ...prevMessages,
-//         { sender: "ai", text: "Loading..." }, // Placeholder for AI response
-//       ]);
-//       setIsLoading(false);
-//     }, 1500);
-//   };
+const ChatMessage = ({ message }: { message: Message }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      className={`p-4 rounded-lg ${
+        message.type === 'user' ? 'bg-blue-500/20 ml-auto' : 'bg-gray-500/20'
+      }`}
+    >
+      {message.content}
+    </motion.div>
+  );
+};
 
-//   return (
-//     <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white flex flex-col">
-//       {/* Header */}
-//       <Header />
+export default function CreateBetPage() {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState('');
+  const [betOptions, setBetOptions] = useState<BetOption[]>([]);
+  const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
+  const [hasBetDetails, setHasBetDetails] = useState(false);
+  const [betDetails, setBetDetails] = useState<BetDetails>({});
+  const [isTyping, setIsTyping] = useState(false);
 
-//       {/* Chat UI */}
-//       <div className="flex-grow flex flex-col items-center justify-start px-4 py-8">
-//         <div className="w-full max-w-2xl mt-16 flex flex-col space-y-4">
-//           {messages.map((msg, index) => (
-//             <div
-//               key={index}
-//               className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
-//             >
-//               <div
-//                 className={`p-[1px] rounded-xl ${
-//                   msg.sender === "user"
-//                     ? "bg-gradient-to-br from-black via-gray-300 to-gray-100"
-//                     : "bg-gradient-to-br from-black via-purple-700 to-purple-400"
-//                 }`}
-//               >
-//                 <div
-//                   className={`max-w-xs md:max-w-md px-4 py-3 rounded-lg shadow-lg ${
-//                     msg.sender === "user"
-//                       ? "bg-gradient-to-r from-purple-800 to-indigo-800 text-white"
-//                       : "bg-gray-800 text-white"
-//                   } transition-all duration-500 hover:scale-105`}
-//                 >
-//                   {msg.text}
-//                 </div>
-//               </div>
-//             </div>
-//           ))}
-
-//           {/* Loading State */}
-//           {isLoading && (
-//             <div className="flex justify-start">
-//               <div className="p-[1px] rounded-xl bg-gradient-to-br from-black via-purple-700 to-purple-400">
-//                 <div className="max-w-xs md:max-w-md px-4 py-3 rounded-lg shadow-lg bg-gray-800 text-white">
-//                   <div className="flex items-center space-x-2">
-//                     <div className="animate-spin cricket-ball w-6 h-6 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full shadow-lg"></div>
-//                     <span>AI is thinking...</span>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           )}
-//         </div>
-//       </div>
-
-//       {/* Prompt Options */}
-//       <div className="w-full max-w-2xl fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 p-4 rounded-lg shadow-lg flex justify-center items-center space-x-4">
-//         {prompts.map((prompt, index) => (
-//           <button
-//             key={index}
-//             onClick={() => handleSend(prompt)}
-//             className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white px-6 py-3 rounded-lg hover:from-purple-700 hover:to-indigo-800 transition-all duration-300 transform hover:scale-105 shadow-md"
-//           >
-//             {prompt}
-//           </button>
-//         ))}
-//       </div>
-
-//       {/* Cricket Ball Loading Animation */}
-//       <style jsx>{`
-//         .cricket-ball {
-//           animation: spin 1s linear infinite;
-//         }
-
-//         @keyframes spin {
-//           0% {
-//             transform: rotate(0deg);
-//           }
-//           100% {
-//             transform: rotate(360deg);
-//           }
-//         }
-//       `}</style>
-//     </div>
-//   );
-// }
-
-// export default Page;
-"use client";
-
-import React, { useState } from "react";
-import Header from "../components/Header";
-
-function Page() {
-  const [messages, setMessages] = useState<{ sender: "user" | "ai"; text: string }[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const [bets, setBets] = useState<{ prompt: string; options: string[] }[]>([]);
-
-  const prompts = ["Easy", "Ordinary", "Impossible"];
-  const questions = ["What is your stake?", "How many players?", "Choose a category."];
-
-  const handleSend = (prompt: string) => {
-    setMessages((prevMessages) => [...prevMessages, { sender: "user", text: prompt }]);
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: "ai", text: questions[currentStep] },
-      ]);
-      setSelectedOptions((prevOptions) => [...prevOptions, prompt]);
-      setIsLoading(false);
-      setCurrentStep((prevStep) => prevStep + 1);
-    }, 1500);
-  };
-
-  const handleAnswer = (answer: string) => {
-    setMessages((prevMessages) => [...prevMessages, { sender: "user", text: answer }]);
-    setIsLoading(true);
-
-    if (currentStep < questions.length) {
-      setTimeout(() => {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { sender: "ai", text: questions[currentStep] },
-        ]);
-        setSelectedOptions((prevOptions) => [...prevOptions, answer]);
-        setIsLoading(false);
-        setCurrentStep((prevStep) => prevStep + 1);
-      }, 1500);
-    } else {
-      // All questions answered, create the bet
-      setTimeout(() => {
-        const newBet = { prompt: selectedOptions[0], options: selectedOptions.slice(1) };
-        setBets((prevBets) => [...prevBets, newBet]);
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { sender: "ai", text: "Your bet is created!" },
-        ]);
-        setIsLoading(false);
-        setCurrentStep(0);
-        setSelectedOptions([]);
-      }, 1500);
+  const handleSend = () => {
+    if (!input.trim()) {
+      alert("Please enter a message!");
+      return;
     }
+    setMessages(prev => [...prev, { type: 'user', content: input }]);
+    setInput('');
+    const team = "your_team_name"; // Replace with the actual team name or logic to get the team
+    setMessages(prev => [
+      ...prev,
+      { type: 'user', content: `I'll predict the team for ${team}` },
+      { type: 'ai', content: `Great! Select 11 players you think will be in the ${team} playing XI:` }
+    ]);
+    
+    setBetOptions([]);
+    setSelectedPlayers([]);
+    
+    const teamPlayers = TEAM_PLAYERS[team] || [];
+    setBetOptions(
+      teamPlayers.map(player => ({
+        label: `${player.name} (${player.role})`,
+        value: player.name
+      }))
+    );
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white flex flex-col">
-      {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
       <Header />
+      <main className="mt-[11vh]">
+        <motion.div 
+          className="max-w-4xl mx-auto backdrop-blur-lg bg-black/30 rounded-2xl shadow-2xl overflow-hidden"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          {/* Header */}
+          <div className="p-6 border-b border-white/10">
+            <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+              AI Betting Assistant
+            </h1>
+            <p className="text-white/60 mt-2">Let's create your perfect bet together</p>
+          </div>
 
-      {/* Chat UI */}
-      <div className="flex-grow flex flex-col items-center justify-start px-4 py-8">
-        <div className="w-full max-w-2xl mt-16 flex flex-col space-y-4">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
-            >
-              <div
-                className={`p-[1px] rounded-xl ${
-                  msg.sender === "user"
-                    ? "bg-gradient-to-br from-black via-gray-300 to-gray-100"
-                    : "bg-gradient-to-br from-black via-purple-700 to-purple-400"
-                }`}
-              >
-                <div
-                  className={`max-w-xs md:max-w-md px-4 py-3 rounded-lg shadow-lg ${
-                    msg.sender === "user"
-                      ? "bg-gradient-to-r from-purple-800 to-indigo-800 text-white"
-                      : "bg-gray-800 text-white"
-                  }`}
+          {/* Chat Area */}
+          <div className="h-[60vh] overflow-y-auto p-6 space-y-4">
+            <AnimatePresence>
+              {messages.map((message, index) => (
+                <ChatMessage key={index} message={message} />
+              ))}
+              {isTyping && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex gap-2 text-white/60"
                 >
-                  {msg.text}
-                </div>
-              </div>
+                  <span className="animate-bounce">●</span>
+                  <span className="animate-bounce delay-100">●</span>
+                  <span className="animate-bounce delay-200">●</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Input Area */}
+          <div className="p-6 border-t border-white/10">
+            <div className="flex gap-4">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg
+                          focus:ring-2 focus:ring-cyan-400 transition-all duration-300
+                          text-white placeholder-white/50"
+                placeholder="Type your message..."
+              />
+              <motion.button
+                onClick={handleSend}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 
+                         rounded-lg font-semibold text-white shadow-lg
+                         hover:shadow-cyan-500/50 transition-all duration-300"
+              >
+                <IoSendSharp className="w-5 h-5" />
+              </motion.button>
             </div>
-          ))}
+          </div>
 
-          {/* Loading State */}
-          {isLoading && (
-            <div className="flex justify-start">
-              <div className="p-[1px] rounded-xl bg-gradient-to-br from-black via-purple-700 to-purple-400">
-                <div className="max-w-xs md:max-w-md px-4 py-3 rounded-lg shadow-lg bg-gray-800 text-white">
-                  <div className="flex items-center space-x-2">
-                    <div className="animate-spin cricket-ball w-6 h-6 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full shadow-lg"></div>
-                    <span>AI is thinking...</span>
-                  </div>
-                </div>
-              </div>
+          {/* Quick Options */}
+          <div className="p-4 border-t border-white/10">
+            <div className="flex flex-wrap gap-2 justify-center">
+              {betOptions.map((option, index) => (
+                <motion.button
+                  key={index}
+                  onClick={() => {
+                    // Handle option selection logic
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg
+                           text-white hover:bg-white/10 transition-all duration-300"
+                >
+                  {option.label}
+                </motion.button>
+              ))}
             </div>
-          )}
-        </div>
-      </div>
+          </div>
 
-      {/* Options */}
-      {currentStep === 0 ? (
-        <div className="w-full max-w-2xl fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 p-4 rounded-lg shadow-lg flex justify-center items-center space-x-4">
-          {prompts.map((prompt, index) => (
-            <button
-              key={index}
-              onClick={() => handleSend(prompt)}
-              className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white px-6 py-3 rounded-lg hover:from-purple-700 hover:to-indigo-800 transition-all duration-300 transform hover:scale-105 shadow-md"
+          {/* Bet Summary */}
+          {hasBetDetails && (
+            <motion.div 
+              className="p-6 border-t border-white/10"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
             >
-              {prompt}
-            </button>
-          ))}
-        </div>
-      ) : (
-        <div className="w-full max-w-2xl fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 p-4 rounded-lg shadow-lg flex justify-center items-center space-x-4">
-          {["Option 1", "Option 2", "Option 3"].map((answer, index) => (
-            <button
-              key={index}
-              onClick={() => handleAnswer(answer)}
-              className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white px-6 py-3 rounded-lg hover:from-purple-700 hover:to-indigo-800 transition-all duration-300 transform hover:scale-105 shadow-md"
-            >
-              {answer}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Bets Grid */}
-      <div className="w-full p-8">
-        <h2 className="text-xl font-bold text-center text-white mb-4">Created Bets</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {bets.map((bet, index) => (
-            <div
-              key={index}
-              className="p-4 bg-gray-800 rounded-lg shadow-lg text-white space-y-2"
-            >
-              <h3 className="text-lg font-semibold">Bet: {bet.prompt}</h3>
-              <ul className="list-disc list-inside">
-                {bet.options.map((option, i) => (
-                  <li key={i}>{option}</li>
+              <h2 className="text-xl font-semibold text-white mb-4">Bet Summary</h2>
+              <div className="grid grid-cols-2 gap-4 text-white/80">
+                {Object.entries(betDetails).map(([key, value]) => (
+                  value && (
+                    <div key={key} className="bg-white/5 p-3 rounded-lg">
+                      <span className="text-white/60">{key}: </span>
+                      <span>{value}</span>
+                    </div>
+                  )
                 ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
+              </div>
+            </motion.div>
+          )}
+        </motion.div>
+      </main>
     </div>
   );
 }
-
-export default Page;

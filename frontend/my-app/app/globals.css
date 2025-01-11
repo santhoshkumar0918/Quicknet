@@ -20,4 +20,11 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+input:where([type='submit']) {
+  -webkit-appearance: button;
+  appearance: button;
+  background-color: transparent;
+  background-image: none;
+}
+
 

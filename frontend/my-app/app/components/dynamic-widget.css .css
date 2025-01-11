@@ -17,4 +17,28 @@
     outline: none;
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Blue focus ring */
   }
-  
+  .custom-dynamic-widget-button .sign-in-button:active {
+    transform: scale(0.95); /* Slight scale down effect when clicked */
+  }
+
+  .custom-dynamic-widget-button .sign-in-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .custom-dynamic-widget-button .sign-in-button .loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
