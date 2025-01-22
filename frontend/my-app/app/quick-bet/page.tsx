@@ -21,7 +21,6 @@ export default function QuickBet() {
     betType: 'win'
   });
 
-  // Get match details from URL params
   const matchName = searchParams?.get('match') || 'Match';
   const team1 = searchParams?.get('team1') || 'Team 1';
   const team2 = searchParams?.get('team2') || 'Team 2';
