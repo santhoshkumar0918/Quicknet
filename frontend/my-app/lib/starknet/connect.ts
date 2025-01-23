@@ -7,20 +7,30 @@ import { Provider, Account, ec, Contract, constants } from "starknet";
  * @returns StarkNet contract instance.
  */
 export const connectContract = async (contractAddress: string, abi: any) => {
- 
-  const provider = new Provider({ 
-    sequencer: { 
-      baseUrl: constants.StarknetChainId.SN_GOERLI  
-    } 
+  // Initialize provider
+  const provider = new Provider({
+    sequencer: { network: constants.StarknetChainId.SN_GOERLI },
   });
 
+  // Load private key securely
+  const privateKey = process.env.PRIVATE_KEY!;
+  if (!privateKey) {
+    throw new Error("Private key is not set. Please configure it in your environment variables.");
+  }
+
+  // Generate key pair
+  const keyPair = ec.getKeyPair(privateKey); // Check if this works with your library version
   
-  const privateKey = "YOUR_PRIVATE_KEY"; 
-  const keyPair = ec.starkCurve.getKeyPair(privateKey); 
-  const accountAddress = "YOUR_ACCOUNT_ADDRESS"; 
+  // Load account address
+  const accountAddress = process.env.ACCOUNT_ADDRESS!;
+  if (!accountAddress) {
+    throw new Error("Account address is not set. Please configure it in your environment variables.");
+  }
+
+  // Initialize account
   const account = new Account(provider, accountAddress, keyPair);
 
-  
+  // Connect to contract
   const contract = new Contract(abi, contractAddress, account);
 
   console.log("Contract connected:", contract);
