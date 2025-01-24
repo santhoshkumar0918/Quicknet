@@ -26,7 +26,7 @@ import { useToast } from "@/hooks/use-toast";
 
 type TransactionState = {
   isProcessing: boolean;
-  hash: string | null; // Allow string or null for hash
+  hash: string | null; 
   status: string;
   error: null | string;
 };
