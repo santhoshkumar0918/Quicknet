@@ -4,11 +4,29 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useDynamicContext, Wallet } from "@dynamic-labs/sdk-react-core";
-import { AccountInterface, Contract, CallData, Abi } from "starknet";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AccountInterface, CallData, Abi } from "starknet";
+import {
+  Alert,
+  AlertDescription,
+} from "@/components/ui/alert";
 import { FaEthereum } from "react-icons/fa";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
+
+type TransactionState = {
+  isProcessing: boolean;
+  hash: string | null; // Allow string or null for hash
+  status: string;
+  error: null | string;
+};
+
 
 class StarknetTransactionHandler {
   private account: AccountInterface;
@@ -26,10 +44,9 @@ class StarknetTransactionHandler {
         entrypoint: "place_bet",
         calldata: CallData.compile([betAmount]),
       };
-      
-      // In a real app, you'd fetch this from an API endpoint
+
       const abi: Abi[] = []; // Add your contract ABI here
-      
+
       const response = await this.account.execute([tx], abi, {
         maxFee: BigInt(1e16),
       });
@@ -55,37 +72,30 @@ class StarknetTransactionHandler {
 export default function PlaceYourBetForm() {
   const router = useRouter();
   const [betAmount, setBetAmount] = useState("");
-  const [transactionState, setTransactionState] = useState<{
-    isProcessing: boolean;
-    hash: string | null;
-    status: string;
-    error: string | null;
-  }>({
+  const [transactionState, setTransactionState] = useState({
     isProcessing: false,
     hash: null,
     status: "idle",
     error: null,
   });
-
   const { primaryWallet } = useDynamicContext();
-
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { toast } = useToast();
-  
+
   const [betDetails, setBetDetails] = useState({
     amount: "",
     team: "",
     odds: "",
-    potentialReturn: 0
+    potentialReturn: 0,
   });
 
   const validateBet = (amount: string) => {
     if (!amount) {
-      throw new Error("Please enter a bet amount");
+      throw new Error("Please enter a bet amount.");
     }
     const numAmount = Number(amount);
     if (isNaN(numAmount) || numAmount <= 0) {
-      throw new Error("Please enter a valid positive number");
+      throw new Error("Please enter a valid positive number.");
     }
     return numAmount;
   };
@@ -95,7 +105,7 @@ export default function PlaceYourBetForm() {
     const account = (await normalizedWallet?.connector?.getSigner()) as AccountInterface;
 
     if (!account) {
-      throw new Error("Please connect your wallet first");
+      throw new Error("Please connect your wallet first.");
     }
 
     return account;
@@ -104,33 +114,26 @@ export default function PlaceYourBetForm() {
   const handlePlaceBet = () => {
     try {
       const numAmount = validateBet(betAmount);
-      const potentialReturn = numAmount * 2; // Calculate based on actual odds
-      
+      const potentialReturn = numAmount * 2; // Example odds calculation
       setBetDetails({
         amount: betAmount,
-        team: "Team Name", // Get from props/context
-        odds: "2.0", // Get from actual odds
-        potentialReturn
+        team: "Team Name", // Replace with actual team name
+        odds: "2.0", // Replace with dynamic odds
+        potentialReturn,
       });
-      
       setShowConfirmation(true);
     } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message
+        description: error.message,
       });
     }
   };
 
   const handleConfirmBet = async () => {
     setShowConfirmation(false);
-    setTransactionState({
-      isProcessing: true,
-      hash: null,
-      status: "pending",
-      error: null,
-    });
+    setTransactionState({ isProcessing: true, hash: null, status: "pending", error: null });
 
     try {
       const account = await getStarknetAccount();
@@ -140,11 +143,7 @@ export default function PlaceYourBetForm() {
       );
 
       const txHash = await txHandler.invokePlaceBet(BigInt(betAmount).toString());
-
-      setTransactionState((prev) => ({
-        ...prev,
-        hash: txHash,
-      }));
+      setTransactionState((prev) => ({ ...prev, hash: txHash }));
 
       const receipt = await txHandler.waitForTransaction(txHash);
 
@@ -153,42 +152,30 @@ export default function PlaceYourBetForm() {
           title: "Bet Placed Successfully!",
           description: "Redirecting to your portfolio...",
         });
-        
-        // Store bet details in localStorage for portfolio page
-        const existingBets = JSON.parse(localStorage.getItem('userBets') || '[]');
+
+        const existingBets = JSON.parse(localStorage.getItem("userBets") || "[]");
         const newBet = {
           id: Date.now(),
           ...betDetails,
-          status: 'active',
+          status: "active",
           timestamp: new Date().toISOString(),
-          txHash
+          txHash,
         };
-        localStorage.setItem('userBets', JSON.stringify([...existingBets, newBet]));
+        localStorage.setItem("userBets", JSON.stringify([...existingBets, newBet]));
 
-        // Redirect to portfolio after short delay
-        setTimeout(() => {
-          router.push('/my-bets');
-        }, 1500);
+        setTimeout(() => router.push("/my-bets"), 1500);
       } else {
         throw new Error(`Transaction failed: ${receipt.status}`);
       }
     } catch (error: any) {
-      console.error("Bet placement error:", error);
-      setTransactionState((prev) => ({
-        ...prev,
-        status: "error",
-        error: error.message,
-      }));
+      setTransactionState({ ...transactionState, status: "error", error: error.message });
       toast({
         variant: "destructive",
         title: "Error placing bet",
-        description: error.message
+        description: error.message,
       });
     } finally {
-      setTransactionState((prev) => ({
-        ...prev,
-        isProcessing: false,
-      }));
+      setTransactionState((prev) => ({ ...prev, isProcessing: false }));
     }
   };
 
@@ -200,16 +187,13 @@ export default function PlaceYourBetForm() {
         </Alert>
       )}
 
-      <motion.div 
+      <motion.div
         className="bg-gradient-to-br from-black via-purple-700 to-purple-400 p-[1px] rounded-lg"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
         <div className="bg-gray-950 rounded-lg p-8 space-y-6">
-          <h1 className="text-2xl font-bold text-center text-purple-400">
-            Place Your Bet
-          </h1>
-
+          <h1 className="text-2xl font-bold text-center text-purple-400">Place Your Bet</h1>
           <div className="space-y-2">
             <label htmlFor="betAmount" className="block text-gray-400">
               Enter Bet Amount:
@@ -264,13 +248,12 @@ export default function PlaceYourBetForm() {
         </div>
       </motion.div>
 
-      {/* Add Confirmation Dialog */}
       <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
         <DialogContent className="bg-gray-900 border border-purple-500/20">
           <DialogHeader>
             <DialogTitle className="text-xl text-white">Confirm Your Bet</DialogTitle>
             <DialogDescription className="text-gray-400">
-              Please review your bet details before confirming
+              Please review your bet details before confirming.
             </DialogDescription>
           </DialogHeader>
 
@@ -285,26 +268,18 @@ export default function PlaceYourBetForm() {
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-400">Odds:</span>
-              <span className="text-white">{betDetails.odds}x</span>
+              <span className="text-white">{betDetails.odds}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-400">Potential Return:</span>
-              <span className="text-green-400 font-bold">{betDetails.potentialReturn} ETH</span>
+              <span className="text-white font-bold">{betDetails.potentialReturn} ETH</span>
             </div>
           </div>
 
-          <DialogFooter className="flex gap-3">
-            <motion.button
-              onClick={() => setShowConfirmation(false)}
-              className="flex-1 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Cancel
-            </motion.button>
+          <DialogFooter>
             <motion.button
               onClick={handleConfirmBet}
-              className="flex-1 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800"
+              className="w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white font-bold transition-all"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -313,12 +288,6 @@ export default function PlaceYourBetForm() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      {transactionState.isProcessing && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-500" />
-        </div>
-      )}
     </div>
   );
-} 
+}
