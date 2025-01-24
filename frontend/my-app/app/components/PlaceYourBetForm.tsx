@@ -4,6 +4,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useDynamicContext, Wallet } from "@dynamic-labs/sdk-react-core";
+import abiData from './public/contracts/quicknet_project_contracts_FieldFactory.contract_class.json';
+
+const abi: Abi[] = abiData;
+
 import { AccountInterface, CallData, Abi } from "starknet";
 import {
   Alert,
@@ -45,8 +49,7 @@ class StarknetTransactionHandler {
         calldata: CallData.compile([betAmount]),
       };
 
-      const abi: Abi[] = []; // Add your contract ABI here
-
+      const abi: Abi[] = abiData;
       const response = await this.account.execute([tx], abi, {
         maxFee: BigInt(1e16),
       });
