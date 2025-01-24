@@ -18,7 +18,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 type TransactionState = {
   isProcessing: boolean;
@@ -72,7 +72,7 @@ class StarknetTransactionHandler {
 export default function PlaceYourBetForm() {
   const router = useRouter();
   const [betAmount, setBetAmount] = useState("");
-  const [transactionState, setTransactionState] = useState({
+  const [transactionState, setTransactionState] = useState<TransactionState>({
     isProcessing: false,
     hash: null,
     status: "idle",
