@@ -120,7 +120,7 @@ export default function PlaceYourBetForm() {
       setBetDetails({
         amount: betAmount,
         team: "Team Name", // Replace with actual team name
-        odds: "2.0", // Replace with dynamic odds
+        odds: "2.0", // Replace with our dynamic odds
         potentialReturn,
       });
       setShowConfirmation(true);
