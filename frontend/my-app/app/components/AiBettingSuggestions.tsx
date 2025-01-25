@@ -186,42 +186,25 @@ interface AiBettingSuggestionsProps {
   matchId: string;
   team1: string;
   team2: string;
-  onSelectBetAction: (suggestion: BettingSuggestion) => void;
+  onSelectBet: (suggestion: BettingSuggestion) => void;
 }
 
-export default function AiBettingSuggestions({ matchId, team1, team2, onSelectBetAction }: AiBettingSuggestionsProps) {
-  const [suggestions, setSuggestions] = useState<BettingSuggestion[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
-
-  // Your Gemini API key
-  const GEMINI_API_KEY = 'YOUR_API_KEY_HERE';  // Replace this with your actual API key
+export default function AiBettingSuggestions({ matchId, team1, team2, onSelectBet }: AiBettingSuggestionsProps) {
+  const [suggestions, setSuggestions] = useState<BettingSuggestion[]>([]);  // state to hold the AI suggestions
+  const [loading, setLoading] = useState<boolean>(true);  // state to manage loading state
+  const [error, setError] = useState<string>('');  // state to manage errors
 
   useEffect(() => {
+    // Replace this with the actual API endpoint
+    const apiEndpoint = `https://your-ai-api.com/betting-suggestions?matchId=${matchId}&team1=${team1}&team2=${team2}`;
+    
+    // Fetch AI betting suggestions
     const fetchSuggestions = async () => {
       try {
-        // Gemini endpoint for market data (update this with your actual API endpoint)
-        const apiEndpoint = `https://api.gemini.com/v1/your-api-endpoint/${matchId}/${team1}/${team2}`;
-
-        // Set headers for API authentication
-        const headers = {
-          'Content-Type': 'application/json',
-          'X-Gemini-APIKey': GEMINI_API_KEY, // Add your Gemini API key for authentication
-        };
-
-        // Fetch data from Gemini API
-        const response = await fetch(apiEndpoint, {
-          method: 'GET',
-          headers: headers,
-        });
-
-        // Check if the response is successful
-        if (!response.ok) {
-          throw new Error('Failed to fetch betting suggestions');
-        }
-
-        // Parse JSON data
+        const response = await fetch(apiEndpoint);
         const data = await response.json();
+        
+        // Assuming the response is in the format of an array of betting suggestions
         setSuggestions(data);
       } catch (err) {
         setError('Failed to load betting suggestions.');
@@ -313,7 +296,7 @@ export default function AiBettingSuggestions({ matchId, team1, team2, onSelectBe
               </div>
 
               <motion.button
-                onClick={() => onSelectBetAction(suggestion)}
+                onClick={() => onSelectBet(suggestion)}
                 className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg py-2 px-4 font-semibold flex items-center justify-center gap-2"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
