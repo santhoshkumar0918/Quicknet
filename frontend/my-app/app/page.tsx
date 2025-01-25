@@ -304,8 +304,8 @@ export default function HomePage() {
       score: "IND: 185/4 (18.2 ov)",
       teams: ["India", "Australia"],
       captains: {
-        team1: { name: "Rohit Sharma", image: "/captains/rohit.jpg" },
-        team2: { name: "Pat Cummins", image: "/captains/cummins.jpg" }
+        team1: { name: "Rohit Sharma", image: "/images/rohit.jpeg" },
+        team2: { name: "Pat Cummins", image: "/captains/cummins.jpeg" }
       }
     },
     {
