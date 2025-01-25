@@ -17,10 +17,10 @@ interface AiBettingSuggestionsProps {
   matchId: string;
   team1: string;
   team2: string;
-  onSelectBet: (suggestion: BettingSuggestion) => void;
+  onSelectBetAction: (suggestion: BettingSuggestion) => void;
 }
 
-export default function AiBettingSuggestions({ matchId, team1, team2, onSelectBet }: AiBettingSuggestionsProps) {
+export default function AiBettingSuggestions({ matchId, team1, team2, onSelectBetAction }: AiBettingSuggestionsProps) {
   // In a real app, these would come from your AI backend
   const suggestions: BettingSuggestion[] = [
     {
@@ -135,7 +135,7 @@ export default function AiBettingSuggestions({ matchId, team1, team2, onSelectBe
               </div>
 
               <motion.button
-                onClick={() => onSelectBet(suggestion)}
+                onClick={() => onSelectBetAction(suggestion)}
                 className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg py-2 px-4 font-semibold flex items-center justify-center gap-2"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
