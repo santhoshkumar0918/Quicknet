@@ -48,7 +48,7 @@ class StarknetTransactionHandler {
         calldata: CallData.compile([betAmount]),
       };
 
-      const abi: Abi[] = abiData;
+      const abi: Abi[] = abiData.abi as unknown as Abi[];
       const response = await this.account.execute([tx], abi, {
         maxFee: BigInt(1e16),
       });
