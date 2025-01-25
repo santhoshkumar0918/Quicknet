@@ -116,11 +116,11 @@ export default function PlaceYourBetForm() {
   const handlePlaceBet = () => {
     try {
       const numAmount = validateBet(betAmount);
-      const potentialReturn = numAmount * 2; // Example odds calculation
+      const potentialReturn = numAmount * 2; 
       setBetDetails({
         amount: betAmount,
-        team: "Team Name", // Replace with actual team name
-        odds: "2.0", // Replace with our dynamic odds
+        team: "Team Name", 
+        odds: "2.0",
         potentialReturn,
       });
       setShowConfirmation(true);
