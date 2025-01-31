@@ -1,9 +1,9 @@
 import { useContract } from "@starknet-react/core";
-import fieldFactoryAbi from "../../abis/fieldFactory.json";
+import fieldFactoryAbi from "../../abis/fieldFactory.json" assert { type: "json" };
 
 export const useFieldFactory = () => {
   const { contract } = useContract({
-    abi: fieldFactoryAbi,
+    abi: fieldFactoryAbi as any[],
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
   });
 
