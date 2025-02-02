@@ -305,7 +305,7 @@ export default function HomePage() {
       teams: ["India", "Australia"],
       captains: {
         team1: { name: "Rohit Sharma", image: "/images/rohit.jpeg" },
-        team2: { name: "Pat Cummins", image: "/captains/cummins.jpeg" }
+        team2: { name: "Pat Cummins", image: "/images/cummins.jpeg" }
       }
     },
     {
